@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21e7e6b0e8a6940368d5b94185f436a7, type: 3}
+  m_Name: Enemy
+  m_EditorClassIdentifier: 
+  health: 200
+  damage: 40
+  attackCooldown: 3
+  attackRange: 9
+  closeDistance: 36
+  farDistance: 60
+  dieAnimationDuration: 3
+  canUseWeapon: 0
+  enemyPrefab: {fileID: 1044468907826179784, guid: 6ea03db1fff074e62930e302bfc32274, type: 3}
+  walkSFX: {fileID: 0}
+  hurtSFX: {fileID: 8300000, guid: effc0d496f2c4e144a91033290aefb66, type: 3}
+  dieSFX: {fileID: 8300000, guid: 0a14b81c9eeb97d42861fbdd686e65da, type: 3}
+  attackSFX:
+  - {fileID: 8300000, guid: 01c97b38dbbdfb947aff7c91fff1efbe, type: 3}
+  animationBlendDamp: 0.2
+  randomNoise: 5
+  slowStateUpdateInterval: 1
+  fastStateUpdateInterval: 0.2
