@@ -6,6 +6,7 @@ public class AttackData : ScriptableObject
     public string animatorTriggerName;
     [HideInInspector]
     public int animatorHashesIndex;
+    public bool multiTargetAttack;
     public int resourceCost;
     public AudioClip hitSFX;
 }

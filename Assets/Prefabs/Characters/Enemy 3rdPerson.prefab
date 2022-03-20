@@ -507,7 +507,7 @@ Animator:
   m_GameObject: {fileID: 1044468907826179784}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 58ded2ee65c6c4621a556c16d65782f7, type: 3}
-  m_Controller: {fileID: 9100000, guid: b1a5e557b8b0a44ca9383295518c64aa, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2b5c273567e6443efa6d6716958e4147, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -3890,6 +3890,10 @@ PrefabInstance:
     - target: {fileID: 644250500410998029, guid: 99af2538dbfaddd4f97dd424586148f8, type: 3}
       propertyPath: m_Name
       value: Blood Splash VFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 644250500410998029, guid: 99af2538dbfaddd4f97dd424586148f8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7843620144158810368, guid: 99af2538dbfaddd4f97dd424586148f8, type: 3}
       propertyPath: m_RootOrder

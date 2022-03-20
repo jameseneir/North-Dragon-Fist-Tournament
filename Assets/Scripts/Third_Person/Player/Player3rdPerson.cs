@@ -4,19 +4,22 @@ using UnityEngine.InputSystem;
 
 public class Player3rdPerson : PlayerBase
 {
-    readonly int velX = Animator.StringToHash("Velocity X");
-    readonly int velZ = Animator.StringToHash("Velocity Z");
-    float speedX, speedZ;
+    readonly int vel = Animator.StringToHash("Velocity");
     [SerializeField]
     float lookSensitivity;
 
     [SerializeField]
     GameObject followTarget;
 
+    [SerializeField]
+    GameObject viewTransform;
+
     InputAction lookInput;
     readonly string lookActionName = "Look";
     Vector2 look;
     bool rotate;
+    [SerializeField]
+    float rotateSpeed;
 
     #region Set up
     protected override void SetUp()
@@ -82,28 +85,24 @@ public class Player3rdPerson : PlayerBase
             localEulerRotation.x = 35;
         }
         followTarget.transform.localEulerAngles = localEulerRotation;
-    }
-
-    void MatchRotationWithView()
-    {
-        if (Mathf.Abs(followTarget.transform.localEulerAngles.y) > 1)
-        {
-            float yAngle = followTarget.transform.eulerAngles.y;
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, yAngle, 0);
-            followTarget.transform.localEulerAngles = new Vector3(followTarget.transform.eulerAngles.x, 0, 0);
-        }
+        viewTransform.transform.localEulerAngles = new Vector3(0, followTarget.transform.localEulerAngles.y, 0);
     }
     #endregion
 
     #region Movement
+
     protected override IEnumerator Move()
     {
         while (move)
         {
-            MatchRotationWithView();
+            Quaternion cache = followTarget.transform.rotation;
+            Vector3 forward = direction.x * viewTransform.transform.right + direction.y * viewTransform.transform.forward;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(forward, transform.up), Time.deltaTime * rotateSpeed);
+            followTarget.transform.rotation = cache;
+            viewTransform.transform.localEulerAngles = new Vector3(0, followTarget.transform.localEulerAngles.y, 0);
             if (isJumping)
             {
-                velocity = direction.x * midAirMoveSpeed * transform.right + direction.y * midAirMoveSpeed * transform.forward + Vector3.up * yVel;
+                velocity = midAirMoveSpeed * forward + Vector3.up * yVel;
                 controller.Move(velocity * Time.deltaTime);
             }
             else
@@ -119,39 +118,22 @@ public class Player3rdPerson : PlayerBase
                     }
                     else
                     {
-                        velocity = direction.x * midAirMoveSpeed * transform.right + direction.y * midAirMoveSpeed * transform.forward + Vector3.up * yVel;
+                        velocity = midAirMoveSpeed * forward + Vector3.up * yVel;
                         controller.Move(velocity * Time.deltaTime);
                     }
                 }
                 else
                 {
-                    speedZ = direction.y;
-                    speedX = direction.x;
-
-                    if (isSprinting)
+                    if(!isSprinting)
                     {
-                        if (speedZ < -0.1f)
-                        {
-                            speedZ -= 1;
-                        }
-                        else if (speedZ > 0.1f)
-                        {
-                            speedZ += 1;
-                        }
-                        if (speedX > 0.1f)
-                        {
-                            speedX += 1;
-                        }
-                        else if (speedX < -0.1f)
-                        {
-                            speedX -= 1;
-                        }
+                        anim.SetFloat(vel, direction.magnitude, animationBlendDamp, Time.deltaTime);
                     }
-                    anim.SetFloat(velX, speedX, animationBlendDamp, Time.deltaTime);
-                    anim.SetFloat(velZ, speedZ, animationBlendDamp, Time.deltaTime);
+                    else
+                    {
+                        anim.SetFloat(vel, direction.magnitude + 1, animationBlendDamp, Time.deltaTime);
+                    }
                 }
             }
-
             yield return null;
         }
     }
@@ -171,18 +153,6 @@ public class Player3rdPerson : PlayerBase
         StopCoroutine(Move());
     }
     #endregion
-
-    protected override void Jump()
-    {
-        MatchRotationWithView();
-        base.Jump();
-    }
-
-    protected override void Attack(int index)
-    {
-        MatchRotationWithView();
-        base.Attack(index);
-    }
 
     public override void Die()
     {

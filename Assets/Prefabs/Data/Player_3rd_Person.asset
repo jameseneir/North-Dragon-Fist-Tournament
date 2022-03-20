@@ -17,10 +17,10 @@ MonoBehaviour:
   characterPrefab: {fileID: 8522529655557119681, guid: c62d88b16d0ce42d8908aef2d25a65d3, type: 3}
   maxHealth: 200
   jumpHeight: 8
-  attackVFX: []
   walkSFX: {fileID: 0}
   jumpSFX: {fileID: 0}
-  hurtSFX: {fileID: 0}
-  dieSFX: {fileID: 0}
+  hurtSFX: {fileID: 8300000, guid: effc0d496f2c4e144a91033290aefb66, type: 3}
+  dieSFX: {fileID: 8300000, guid: 0a14b81c9eeb97d42861fbdd686e65da, type: 3}
   attackSFX:
+  - {fileID: 8300000, guid: 01c97b38dbbdfb947aff7c91fff1efbe, type: 3}
   - {fileID: 8300000, guid: 01c97b38dbbdfb947aff7c91fff1efbe, type: 3}

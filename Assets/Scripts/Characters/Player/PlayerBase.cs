@@ -46,6 +46,8 @@ public class PlayerBase : CharacterComponent
     PlayerUpgrades playerUpgrades;
 
     #region Attack
+    protected RaycastHit[] buffer;
+
     [SerializeField]
     AttackData[] data;
 
@@ -64,16 +66,16 @@ public class PlayerBase : CharacterComponent
     HitBox[] hitBoxes;
 
     [SerializeField]
-    LayerMask enemyLayer;
-
-    RaycastHit hit;
-    [SerializeField]
-    Vector3 offset;
-    [SerializeField]
-    float maxDistance;
+    protected LayerMask enemyLayer;
 
     [SerializeField]
-    Vector3 proximityBox;
+    protected Vector3 offset;
+
+    [SerializeField]
+    protected Vector3 proximityBox;
+
+    [SerializeField]
+    float snapDuration;
     #endregion
 
     [SerializeField]
@@ -91,6 +93,7 @@ public class PlayerBase : CharacterComponent
         controller.Move(-0.5f * Vector3.up);
         stepOffset = controller.stepOffset;
 
+        buffer = new RaycastHit[3];
         for(int i = 0; i < data.Length; i++)
         {
             data[i].animatorHashesIndex = Animator.StringToHash(data[i].animatorTriggerName);
@@ -133,7 +136,7 @@ public class PlayerBase : CharacterComponent
         };
 
         //jump
-        string southButtonInputName = "SouthButton";
+        string southButtonInputName = "Jump";
         InputAction southButtonInput = input.actions[southButtonInputName];
         southButtonInput.performed += ctx =>
         {
@@ -144,7 +147,7 @@ public class PlayerBase : CharacterComponent
         }; 
 
         //heavy attack
-        string northButtonInputName = "NorthButton";
+        string northButtonInputName = "Heavy Attack";
         InputAction northButtonInput = input.actions[northButtonInputName];
         northButtonInput.performed += ctx => Attack(1);
 
@@ -160,12 +163,12 @@ public class PlayerBase : CharacterComponent
         };
 
         //light attack
-        string westButtonInputName = "WestButton";
+        string westButtonInputName = "Normal Attack";
         InputAction westButtonInput = input.actions[westButtonInputName];
         westButtonInput.performed += ctx => Attack(0);
 
         //run
-        string leftTriggerInputName = "LeftTrigger";
+        string leftTriggerInputName = "Sprinting";
         InputAction leftTriggerInput = input.actions[leftTriggerInputName];
         leftTriggerInput.performed += ctx =>
         {
@@ -186,7 +189,7 @@ public class PlayerBase : CharacterComponent
         };
 
         //guarding
-        string rightTriggerInputName = "RightTrigger";
+        string rightTriggerInputName = "Blocking";
         InputAction rightTriggerInput = input.actions[rightTriggerInputName];
         rightTriggerInput.performed += ctx =>
         {
@@ -237,26 +240,20 @@ public class PlayerBase : CharacterComponent
     }
 
     #region Attack
+
+
     protected virtual void Attack(int index)
     {
         if (cannotAttack)
             return;
         if (move)
             StopMoving();
-
-        if(Physics.BoxCast(transform.position + offset, proximityBox, transform.forward, out hit, Quaternion.identity, maxDistance, enemyLayer, QueryTriggerInteraction.Ignore))
-        {
-            transform.LookAt(hit.transform, transform.up);
-            Debug.Log("rotated");
-        }
-
         if(isUsingWeapon)
         {
             //index = currentWeapon.attackIndex;
         }
         currentAttack = index;
         anim.SetTrigger(data[index].animatorHashesIndex);
-        
     }
 
     bool hitboxEnabled, vfxEnabled;

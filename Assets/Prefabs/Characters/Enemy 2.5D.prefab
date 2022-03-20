@@ -3891,6 +3891,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood Splash VFX
       objectReference: {fileID: 0}
+    - target: {fileID: 644250500410998029, guid: 99af2538dbfaddd4f97dd424586148f8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7843620144158810368, guid: 99af2538dbfaddd4f97dd424586148f8, type: 3}
       propertyPath: m_RootOrder
       value: 0
