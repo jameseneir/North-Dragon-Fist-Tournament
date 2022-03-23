@@ -59,13 +59,6 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         float randomRange = enemy.randomNoise;
         float initial = randomRange;
         randomRange = UnityEngine.Random.Range(-initial, initial);
-        if(Mathf.Abs(randomRange) < initial / 2)
-        {
-            if (randomRange < 0)
-                randomRange -= initial / 2;
-            else
-                randomRange += initial / 2;
-        }
         closeDistance = enemy.closeDistance * enemy.closeDistance + randomRange;
         farDistance = enemy.farDistance * enemy.farDistance + randomRange;
         atkRange = enemy.attackRange * enemy.attackRange;

@@ -27,6 +27,6 @@ MonoBehaviour:
   attackSFX:
   - {fileID: 8300000, guid: 01c97b38dbbdfb947aff7c91fff1efbe, type: 3}
   animationBlendDamp: 0.2
-  randomNoise: 5
+  randomNoise: 10
   slowStateUpdateInterval: 1
   fastStateUpdateInterval: 0.2
