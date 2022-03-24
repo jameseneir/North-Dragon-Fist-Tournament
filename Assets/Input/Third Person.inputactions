@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprinting",
+                    "name": "LeftTrigger",
                     "type": "Button",
                     "id": "868ec8bf-5c32-4ab4-843b-2103be35b95a",
                     "expectedControlType": "Button",
@@ -192,7 +192,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "Sprinting",
+                    "action": "LeftTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -203,7 +203,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Sprinting",
+                    "action": "LeftTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

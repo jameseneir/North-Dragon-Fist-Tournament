@@ -124,14 +124,7 @@ public class Player3rdPerson : PlayerBase
                 }
                 else
                 {
-                    if(!isSprinting)
-                    {
-                        anim.SetFloat(vel, direction.magnitude, animationBlendDamp, Time.deltaTime);
-                    }
-                    else
-                    {
-                        anim.SetFloat(vel, direction.magnitude + 1, animationBlendDamp, Time.deltaTime);
-                    }
+                    anim.SetFloat(vel, direction.magnitude, animationBlendDamp, Time.deltaTime);
                 }
             }
             yield return null;

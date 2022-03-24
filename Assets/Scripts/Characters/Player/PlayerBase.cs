@@ -26,7 +26,6 @@ public class PlayerBase : CharacterComponent
     protected float midAirMoveSpeed;
 
     protected bool cannotMove;
-    protected bool isSprinting;
     protected bool move;
 
     readonly int jumpingBoolHash = Animator.StringToHash("IsJumping");
@@ -167,25 +166,12 @@ public class PlayerBase : CharacterComponent
         InputAction westButtonInput = input.actions[westButtonInputName];
         westButtonInput.performed += ctx => Attack(0);
 
-        //run
-        string leftTriggerInputName = "Sprinting";
+        //left trigger
+        string leftTriggerInputName = "LeftTrigger";
         InputAction leftTriggerInput = input.actions[leftTriggerInputName];
         leftTriggerInput.performed += ctx =>
         {
-            if (!move || cannotMove)
-                return;
-            if(!isSprinting)
-            {
-                isSprinting = true;
-            } 
-        };
-
-        leftTriggerInput.canceled += ctx =>
-        {
-            if(isSprinting)
-            {
-                isSprinting = false;
-            }
+            //do something
         };
 
         //guarding
