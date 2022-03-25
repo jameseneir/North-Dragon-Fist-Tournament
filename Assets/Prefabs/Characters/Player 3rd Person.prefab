@@ -3809,6 +3809,9 @@ MonoBehaviour:
   proximityBox: {x: 10, y: 1, z: 8}
   snapDuration: 1
   gameOverPanel: {fileID: 0}
+  cam: {fileID: 0}
+  screenShakeIntensity: 0.3
+  screenShakeDuration: 0.1
   lookSensitivity: 2
   followTarget: {fileID: 701661135}
   viewTransform: {fileID: 8095006301881423188}

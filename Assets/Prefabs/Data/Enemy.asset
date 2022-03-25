@@ -15,8 +15,8 @@ MonoBehaviour:
   health: 200
   damage: 40
   attackCooldown: 3
-  attackRange: 9
-  closeDistance: 36
+  attackRange: 15
+  closeDistance: 40
   farDistance: 60
   dieAnimationDuration: 3
   canUseWeapon: 0

@@ -76,9 +76,9 @@ public class Player3rdPerson : PlayerBase
         Vector3 localEulerRotation = followTarget.transform.localEulerAngles;
         localEulerRotation.z = 0;
 
-        if (localEulerRotation.x > 180 && localEulerRotation.x < 360)
+        if (localEulerRotation.x > 180 && localEulerRotation.x < 340)
         {
-            localEulerRotation.x = 360;
+            localEulerRotation.x = 340;
         }
         else if (localEulerRotation.x < 180 && localEulerRotation.x > 35)
         {

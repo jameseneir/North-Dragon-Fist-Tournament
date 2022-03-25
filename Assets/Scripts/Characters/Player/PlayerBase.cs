@@ -1,6 +1,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
 using System.Collections;
+using Cinemachine;
 
 public class PlayerBase : CharacterComponent
 {
@@ -79,6 +80,18 @@ public class PlayerBase : CharacterComponent
 
     [SerializeField]
     GameObject gameOverPanel;
+
+    #region Screen Shake
+    [SerializeField]
+    CinemachineVirtualCamera cam;
+    CinemachineBasicMultiChannelPerlin multi;
+
+    [SerializeField]
+    float screenShakeIntensity;
+    [SerializeField]
+    float screenShakeDuration;
+    WaitForSecondsRealtime screenShakeTime;
+    #endregion
 
     protected virtual void SetUp()
     {
@@ -205,6 +218,8 @@ public class PlayerBase : CharacterComponent
         };
         SetUp();
         #endregion
+        multi = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        screenShakeTime = new WaitForSecondsRealtime(screenShakeDuration);
     }
 
     protected virtual void StartMoving()
@@ -226,8 +241,6 @@ public class PlayerBase : CharacterComponent
     }
 
     #region Attack
-
-
     protected virtual void Attack(int index)
     {
         if (cannotAttack)
@@ -355,6 +368,15 @@ public class PlayerBase : CharacterComponent
         cannotAttack = true;
         if (move)
             StopMoving();
+        //screen shake
+        multi.m_AmplitudeGain = screenShakeIntensity;
+        StartCoroutine(ResetScreenShake());
+    }
+
+    IEnumerator ResetScreenShake()
+    {
+        yield return screenShakeTime;
+        multi.m_AmplitudeGain = 0;
     }
 
     public override void ExitHurtState()
