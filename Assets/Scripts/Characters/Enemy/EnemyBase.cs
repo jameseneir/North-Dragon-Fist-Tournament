@@ -47,7 +47,8 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     WaitForSeconds fastStateUpdate;
 
     protected float animationBlendDamp;
-    float randomAwakeDelay;
+    [SerializeField]
+    float randomAwakeDelay = 3f;
 
     [SerializeField]
     AudioSource audioSource;

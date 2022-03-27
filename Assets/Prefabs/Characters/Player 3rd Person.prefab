@@ -3569,11 +3569,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9011081895941145723}
+  - component: {fileID: 4652304687607877702}
   - component: {fileID: 5545331211133831005}
   - component: {fileID: 4962559209102768417}
   - component: {fileID: 9044137046768640991}
   - component: {fileID: 9044137046543214833}
-  - component: {fileID: 4652304687607877702}
   - component: {fileID: 1946799703}
   - component: {fileID: 2985637013224090126}
   m_Layer: 6
@@ -3603,6 +3603,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4652304687607877702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8522529655557119681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6faafc619044051af72b84d5c72ff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: 926cbb0c2c21144b7b34625a04b80021, type: 2}
+  isHurt: 0
+  isDead: 0
+  weaponDetected: 0
+  isUsingWeapon: 0
+  weaponPivot: {fileID: 9044137047030407565}
+  input: {fileID: 4962559209102768417}
+  audioSource: {fileID: 2985637013224090126}
+  controller: {fileID: 9044137046543214833}
+  gravity: -49.050003
+  midAirMoveSpeed: 10
+  animationBlendDamp: 0.2
+  health: {fileID: 9044137046768640991}
+  anim: {fileID: 5545331211133831005}
+  data:
+  - {fileID: 11400000, guid: 469244d6bd971475d8d4b2d050f22e62, type: 2}
+  - {fileID: 11400000, guid: 1b4e0feab499946169c2ab95066cfac9, type: 2}
+  weaponThrowForce: 3
+  attackVFX:
+  - {fileID: 3048015318900800364}
+  - {fileID: 2631649404966383677}
+  hitBoxes:
+  - {fileID: 1377041509308201432}
+  - {fileID: 5255302813399156740}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  offset: {x: 0, y: 6, z: 2.5}
+  proximityBox: {x: 10, y: 1, z: 8}
+  snapDuration: 1
+  gameOverPanel: {fileID: 0}
+  cam: {fileID: 0}
+  screenShakeIntensity: 0.3
+  screenShakeDuration: 0.1
+  lookSensitivity: 2
+  followTarget: {fileID: 701661135}
+  viewTransform: {fileID: 8095006301881423188}
+  rotateSpeed: 10
 --- !u!95 &5545331211133831005
 Animator:
   serializedVersion: 4
@@ -3766,56 +3816,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.002
   m_Center: {x: 0, y: 5, z: 0}
---- !u!114 &4652304687607877702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8522529655557119681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f6faafc619044051af72b84d5c72ff8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 926cbb0c2c21144b7b34625a04b80021, type: 2}
-  isHurt: 0
-  isDead: 0
-  weaponDetected: 0
-  isUsingWeapon: 0
-  weaponPivot: {fileID: 9044137047030407565}
-  input: {fileID: 4962559209102768417}
-  audioSource: {fileID: 2985637013224090126}
-  controller: {fileID: 9044137046543214833}
-  gravity: -49.050003
-  midAirMoveSpeed: 10
-  animationBlendDamp: 0.2
-  health: {fileID: 9044137046768640991}
-  anim: {fileID: 5545331211133831005}
-  data:
-  - {fileID: 11400000, guid: 469244d6bd971475d8d4b2d050f22e62, type: 2}
-  - {fileID: 11400000, guid: 1b4e0feab499946169c2ab95066cfac9, type: 2}
-  weaponThrowForce: 3
-  attackVFX:
-  - {fileID: 3048015318900800364}
-  - {fileID: 2631649404966383677}
-  hitBoxes:
-  - {fileID: 1377041509308201432}
-  - {fileID: 5255302813399156740}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  offset: {x: 0, y: 6, z: 2.5}
-  proximityBox: {x: 10, y: 1, z: 8}
-  snapDuration: 1
-  gameOverPanel: {fileID: 0}
-  cam: {fileID: 0}
-  screenShakeIntensity: 0.3
-  screenShakeDuration: 0.1
-  lookSensitivity: 2
-  followTarget: {fileID: 701661135}
-  viewTransform: {fileID: 8095006301881423188}
-  rotateSpeed: 10
 --- !u!114 &1946799703
 MonoBehaviour:
   m_ObjectHideFlags: 0
