@@ -29,7 +29,8 @@ public class PlayerBase : CharacterComponent
     protected bool cannotMove;
     protected bool move;
 
-    readonly int jumpingBoolHash = Animator.StringToHash("IsJumping");
+    protected readonly int dashHash = Animator.StringToHash("Dash");
+    protected readonly int jumpingBoolHash = Animator.StringToHash("IsJumping");
     protected readonly int fallingBoolHash = Animator.StringToHash("IsFalling");
     protected readonly int groundedBoolHash = Animator.StringToHash("IsGrounded");
 
@@ -76,6 +77,12 @@ public class PlayerBase : CharacterComponent
 
     [SerializeField]
     float snapDuration;
+
+    int confidence;
+    readonly int maxConfidence = 100;
+
+    [SerializeField]
+    UnityEngine.UI.Slider confidenceMeter;
     #endregion
 
     [SerializeField]
@@ -220,6 +227,9 @@ public class PlayerBase : CharacterComponent
         #endregion
         multi = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         screenShakeTime = new WaitForSecondsRealtime(screenShakeDuration);
+
+        confidenceMeter.value = confidence;
+        confidenceMeter.maxValue = maxConfidence;
     }
 
     protected virtual void StartMoving()
@@ -574,6 +584,25 @@ public class PlayerBase : CharacterComponent
     }
     #endregion
 
+    #region Dash
+    bool isDashing;
+    void Dash()
+    {
+        anim.SetTrigger(dashHash);
+    }
+
+    void EnterDashState()
+    {
+        isDashing = true;
+        audioSource.PlayOneShot(stats.dashSFX);
+    }
+
+    public void ExitDashState()
+    {
+        isDashing = false;
+    }
+    #endregion
+
     public void GetItem(CollectableType collectableType)
     {
         switch(collectableType)
@@ -586,7 +615,7 @@ public class PlayerBase : CharacterComponent
 
     private void OnAnimatorMove()
     {
-        if (!isJumping && !falling && !isAttacking)
+        if (!isJumping && !falling && !isAttacking && !isDashing)
         {
             velocity = anim.deltaPosition;
             velocity.y = -0.25f;

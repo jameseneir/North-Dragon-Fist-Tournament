@@ -10,6 +10,7 @@ public class CharacterStats : ScriptableObject
     public float jumpHeight;
     [Header("Audio")]
     public AudioClip walkSFX;
+    public AudioClip dashSFX;
     public AudioClip jumpSFX;
     public AudioClip hurtSFX;
     public AudioClip dieSFX;
