@@ -232,6 +232,16 @@ public class PlayerBase : CharacterComponent
         confidenceMeter.maxValue = maxConfidence;
     }
 
+    public void IncreaseConfidence(int point)
+    {
+        confidence += point;
+        if(confidence > maxConfidence)
+        {
+            confidence = maxConfidence;
+        }
+        confidenceMeter.value = confidence;
+    }
+
     protected virtual void StartMoving()
     {
         
@@ -309,14 +319,18 @@ public class PlayerBase : CharacterComponent
         }
     }
     
-
     IEnumerator MoveForward()
     {
         while(isMovingForward)
         {
-            controller.Move(forwardSpeed * Time.deltaTime * transform.forward);
+            MovingForward();
             yield return null;
         }
+    }
+
+    void MovingForward()
+    {
+        controller.Move(forwardSpeed * Time.deltaTime * transform.forward);
     }
 
     public void StopMovingForward()
@@ -586,20 +600,43 @@ public class PlayerBase : CharacterComponent
 
     #region Dash
     bool isDashing;
+    [SerializeField]
+    float dashSpeed;
+    [SerializeField]
+    float dashDuration;
+    float dashTimer;
     void Dash()
     {
-        anim.SetTrigger(dashHash);
+        if(!isDashing)
+        {
+            isDashing = true;
+            anim.SetBool(dashHash, false);
+            dashTimer = 0;
+            forwardSpeed = dashSpeed;
+            StartCoroutine(Dashing());
+        }
     }
 
-    void EnterDashState()
+    public void EnterDashState()
     {
-        isDashing = true;
         audioSource.PlayOneShot(stats.dashSFX);
     }
 
     public void ExitDashState()
     {
         isDashing = false;
+    }
+
+    IEnumerator Dashing()
+    {
+        while(dashTimer < dashDuration && isDashing)
+        {
+            dashTimer += Time.deltaTime;
+            MovingForward();
+            yield return null;
+        }
+        isDashing = false;
+        anim.SetBool(dashHash, false);
     }
     #endregion
 
