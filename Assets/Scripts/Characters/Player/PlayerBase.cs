@@ -100,6 +100,10 @@ public class PlayerBase : CharacterComponent
     WaitForSecondsRealtime screenShakeTime;
     #endregion
 
+    [SerializeField]
+    float timeStopDuration;
+    WaitForSecondsRealtime pauseTime;
+
     protected virtual void SetUp()
     {
 
@@ -227,6 +231,8 @@ public class PlayerBase : CharacterComponent
         #endregion
         multi = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         screenShakeTime = new WaitForSecondsRealtime(screenShakeDuration);
+
+        pauseTime = new WaitForSecondsRealtime(timeStopDuration);
 
         confidenceMeter.value = confidence;
         confidenceMeter.maxValue = maxConfidence;
@@ -395,12 +401,21 @@ public class PlayerBase : CharacterComponent
         //screen shake
         multi.m_AmplitudeGain = screenShakeIntensity;
         StartCoroutine(ResetScreenShake());
+        //time stop
+        StartCoroutine(ResumeTime());
+        Time.timeScale = 0;
     }
 
     IEnumerator ResetScreenShake()
     {
         yield return screenShakeTime;
         multi.m_AmplitudeGain = 0;
+    }
+
+    IEnumerator ResumeTime()
+    {
+        yield return pauseTime;
+        Time.timeScale = 1;
     }
 
     public override void ExitHurtState()
