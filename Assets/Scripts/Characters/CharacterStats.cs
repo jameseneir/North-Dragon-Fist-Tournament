@@ -7,6 +7,7 @@ public class CharacterStats : ScriptableObject
     public Sprite characterImage;
     public GameObject characterPrefab;
     public int maxHealth;
+    public int maxConfidence;
     public float jumpHeight;
     [Header("Audio")]
     public AudioClip walkSFX;

@@ -16,8 +16,10 @@ MonoBehaviour:
   characterImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   characterPrefab: {fileID: 2742772641079057341, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
   maxHealth: 200
+  maxConfidence: 30
   jumpHeight: 7
   walkSFX: {fileID: 0}
+  dashSFX: {fileID: 0}
   jumpSFX: {fileID: 0}
   hurtSFX: {fileID: 8300000, guid: effc0d496f2c4e144a91033290aefb66, type: 3}
   dieSFX: {fileID: 8300000, guid: 0a14b81c9eeb97d42861fbdd686e65da, type: 3}

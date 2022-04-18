@@ -79,7 +79,7 @@ public class PlayerBase : CharacterComponent
     float snapDuration;
 
     int confidence;
-    readonly int maxConfidence = 100;
+    readonly int maxConfidence = 30;
 
     [SerializeField]
     UnityEngine.UI.Slider confidenceMeter;
@@ -234,6 +234,7 @@ public class PlayerBase : CharacterComponent
 
         pauseTime = new WaitForSecondsRealtime(timeStopDuration);
 
+        if (confidenceMeter == null) return;
         confidenceMeter.value = confidence;
         confidenceMeter.maxValue = maxConfidence;
     }
