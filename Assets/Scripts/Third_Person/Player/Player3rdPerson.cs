@@ -14,8 +14,9 @@ public class Player3rdPerson : PlayerBase
     [SerializeField]
     GameObject viewTransform;
 
+    [SerializeField]
     InputAction lookInput;
-    readonly string lookActionName = "Look";
+
     Vector2 look;
     bool rotate;
     [SerializeField]
@@ -25,7 +26,6 @@ public class Player3rdPerson : PlayerBase
     protected override void SetUp()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        lookInput = input.actions[lookActionName];
         lookInput.started += ctx =>
         {
             if (cannotMove)

@@ -7,6 +7,6 @@ public class AttackData : ScriptableObject
     [HideInInspector]
     public int animatorHashesIndex;
     public bool multiTargetAttack;
-    public int resourceCost;
+    public int confidenceCost;
     public AudioClip hitSFX;
 }

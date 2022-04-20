@@ -1,12 +1,39 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 using Cinemachine;
 
 public class PlayerBase : CharacterComponent
 {
+    #region Input
     [SerializeField]
-    protected PlayerInput input;
+    InputAction moveAction;
+
+    [SerializeField]
+    InputAction southButtonInput;
+
+    [SerializeField]
+    InputAction northButtonInput;
+
+    [SerializeField]
+    InputAction eastButtonInput;
+
+    [SerializeField]
+    InputAction westButtonInput;
+
+    [SerializeField]
+    InputAction leftTriggerInput;
+
+    [SerializeField]
+    InputAction rightTriggerInput;
+
+    [SerializeField]
+    InputAction leftShoulderInput;
+
+    [SerializeField]
+    InputAction rightShoulderInput;
+    #endregion
 
     [SerializeField]
     AudioSource audioSource;
@@ -49,8 +76,7 @@ public class PlayerBase : CharacterComponent
     #region Attack
     protected RaycastHit[] buffer;
 
-    [SerializeField]
-    AttackData[] data;
+    public List<AttackData> data;
 
     [SerializeField]
     float weaponThrowForce;
@@ -109,7 +135,7 @@ public class PlayerBase : CharacterComponent
 
     }
 
-    private void Awake()
+    private void Start()
     {
         playerUpgrades = GetComponent<PlayerUpgrades>();
         jumpVelocity = Mathf.Sqrt(stats.jumpHeight * -2 * gravity);
@@ -117,21 +143,18 @@ public class PlayerBase : CharacterComponent
         stepOffset = controller.stepOffset;
 
         buffer = new RaycastHit[3];
-        for(int i = 0; i < data.Length; i++)
+        for (int i = 0; i < data.Count; i++)
         {
             data[i].animatorHashesIndex = Animator.StringToHash(data[i].animatorTriggerName);
         }
 
         #region SetUpInput
         //move
-        string moveInputName = "Move";
-        InputAction moveAction = input.actions[moveInputName];
         moveAction.started += ctx =>
         {
-            if (!cannotMove && controller.isGrounded)
+            if (!cannotMove)
             {
                 direction = ctx.ReadValue<Vector2>();
-                
                 if (!move)
                 {
                     StartMoving();
@@ -152,83 +175,71 @@ public class PlayerBase : CharacterComponent
 
         moveAction.canceled += ctx =>
         {
-            if(move)
+            if (move)
             {
                 StopMoving();
             }
         };
 
         //jump
-        string southButtonInputName = "Jump";
-        InputAction southButtonInput = input.actions[southButtonInputName];
         southButtonInput.performed += ctx =>
         {
             if (controller.isGrounded && !cannotMove)
             {
                 Jump();
             }
-        }; 
+        };
 
-        //heavy attack
-        string northButtonInputName = "Heavy Attack";
-        InputAction northButtonInput = input.actions[northButtonInputName];
-        northButtonInput.performed += ctx => Attack(1);
+        //special attack
+        northButtonInput.performed += ctx => SpecialAttack();
+
+        //kick
+        eastButtonInput.performed += ctx => Attack(1);
+
+        //light attack
+        westButtonInput.performed += ctx => Attack(0);
+
+        //dash
+        leftTriggerInput.performed += ctx =>
+        {
+            if (controller.isGrounded && !cannotMove)
+            {
+                Dash();
+            }
+        };
+
+        //guarding
+        rightTriggerInput.performed += ctx =>
+        {
+            if (isHurt || !controller.isGrounded)
+                return;
+            if (!isGuarding)
+                StartGuarding();
+        };
+
+        rightTriggerInput.canceled += ctx =>
+        {
+            if (isGuarding)
+                StopGuarding();
+        };
+
+        //lock to enemy
+        leftShoulderInput.performed += ctx =>
+        {
+            
+        };
 
         //pick up weapon
-        string eastButtonInputName = "EastButton";
-        InputAction eastButtonInput = input.actions[eastButtonInputName];
-        eastButtonInput.performed += ctx =>
+        rightShoulderInput.performed += ctx =>
         {
             if (weaponDetected)
             {
                 EquipWeapon();
             }
         };
-
-        //light attack
-        string westButtonInputName = "Normal Attack";
-        InputAction westButtonInput = input.actions[westButtonInputName];
-        westButtonInput.performed += ctx => Attack(0);
-
-        //left trigger
-        string leftTriggerInputName = "LeftTrigger";
-        InputAction leftTriggerInput = input.actions[leftTriggerInputName];
-        leftTriggerInput.performed += ctx =>
-        {
-            //do something
-        };
-
-        //guarding
-        string rightTriggerInputName = "Blocking";
-        InputAction rightTriggerInput = input.actions[rightTriggerInputName];
-        rightTriggerInput.performed += ctx =>
-        {
-            if (isHurt || !controller.isGrounded)
-                return;
-            if(!isGuarding)
-                StartGuarding();
-        };
-        rightTriggerInput.canceled += ctx =>
-        {
-            if(isGuarding)
-                StopGuarding();
-        };
-
-        string leftShoulderInputName = "LeftShoulder";
-        InputAction leftShoulderInput = input.actions[leftShoulderInputName];
-        leftShoulderInput.performed += ctx =>
-        {
-            //do something
-        };
-
-        string rightShoulderInputName = "RightShoulder";
-        InputAction rightShoulderInput = input.actions[rightShoulderInputName];
-        rightShoulderInput.performed += ctx =>
-        {
-            //do something
-        };
-        SetUp();
         #endregion
+        SetUp();
+
         multi = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         screenShakeTime = new WaitForSecondsRealtime(screenShakeDuration);
 
@@ -282,6 +293,18 @@ public class PlayerBase : CharacterComponent
         anim.SetTrigger(data[index].animatorHashesIndex);
     }
 
+    int attackCount;
+    protected virtual void SpecialAttack()
+    {
+        if(isAttacking && confidence < data[attackCount + 1].confidenceCost)
+        {
+            Attack(attackCount + 1);
+            attackCount = 0;
+            confidence -= data[attackCount + 1].confidenceCost;
+            confidenceMeter.value = confidence;
+        }
+    }
+
     bool hitboxEnabled, vfxEnabled;
     public override void EnableHitbox(int index)
     {
@@ -312,6 +335,14 @@ public class PlayerBase : CharacterComponent
         cannotMove = true;
         isAttacking = true;
         audioSource.PlayOneShot(stats.attackSFX[currentAttack], Random.Range(0.8f, 1));
+        if (attackCount == 3)
+        {
+            attackCount = 1;
+        }
+        else
+        {
+            attackCount++;
+        }
     }
 
     bool isMovingForward;
@@ -349,6 +380,7 @@ public class PlayerBase : CharacterComponent
     public override void ExitAttackState()
     {
         isAttacking = false;
+        
         if(isMovingForward)
         {
             StopMovingForward();
@@ -625,6 +657,8 @@ public class PlayerBase : CharacterComponent
     {
         if(!isDashing)
         {
+            if (move)
+                StopMoving();
             isDashing = true;
             anim.SetBool(dashHash, false);
             dashTimer = 0;
@@ -635,12 +669,15 @@ public class PlayerBase : CharacterComponent
 
     public void EnterDashState()
     {
+        cannotMove = true;
         audioSource.PlayOneShot(stats.dashSFX);
     }
 
     public void ExitDashState()
     {
+        cannotMove = false;
         isDashing = false;
+
     }
 
     IEnumerator Dashing()

@@ -2,25 +2,20 @@ using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
 {
-    GameManager manager;
-
-    public Transform Target { get { return target; } }
-    Transform target;
+    public Transform Target { get; private set; }
 
     [SerializeField]
     Transform[] charactersSpawnPoints;
 
+    [SerializeField]
+    PlayerBase player;
+
     private void Awake()
     {
-        manager = FindObjectOfType<GameManager>();
-        SpawnPlayer(0);
-    }
-
-    void SpawnPlayer(int index)
-    {
-        CharacterStats stats = manager.players[index];
-        GameObject character = Instantiate(stats.characterPrefab, charactersSpawnPoints[index].position, charactersSpawnPoints[index].rotation);
-
-        target = character.transform;
+        for(int i = 0; i < 3; i++)
+        {
+            player.data.Add(GameManager.Instance.data[i]);
+        }
+        Target = player.transform;
     }
 }
