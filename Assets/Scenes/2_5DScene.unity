@@ -6424,6 +6424,38 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1177619134}
     - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: moveAction.m_Id
+      value: f05aee70-50ad-479e-852a-fb379e3b89bd
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: moveAction.m_Name
+      value: Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: eastButtonInput.m_Id
+      value: eecb4365-b739-4afc-bbe8-721807e94e9d
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: westButtonInput.m_Id
+      value: c9bc6006-cfb9-4358-bd6b-d91c5885b1a5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: leftTriggerInput.m_Id
+      value: 5569d30a-13f5-4531-87e4-86deda20ec13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: northButtonInput.m_Id
+      value: e2e037fc-65d4-4e30-98c1-5f431e78f215
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: southButtonInput.m_Id
+      value: cb41c757-34c2-4d0f-9ea3-bdeda66a9086
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: eastButtonInput.m_Name
+      value: East Button Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
       propertyPath: hitBoxes.Array.data[0]
       value: 
       objectReference: {fileID: 1689662916}
@@ -6431,6 +6463,46 @@ PrefabInstance:
       propertyPath: hitBoxes.Array.data[1]
       value: 
       objectReference: {fileID: 1812502926}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: leftShoulderInput.m_Id
+      value: 4fd424ca-a2bf-4c22-a598-e3c1f960caed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: rightTriggerInput.m_Id
+      value: da668e6a-536f-49bf-9b51-b9bbf6b7214d
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: westButtonInput.m_Name
+      value: West Button Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: leftTriggerInput.m_Name
+      value: Left Trigger Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: northButtonInput.m_Name
+      value: North Button Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: rightShoulderInput.m_Id
+      value: c7e099b7-5694-44e0-ae51-e582edb46c9c
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: southButtonInput.m_Name
+      value: South Button Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: leftShoulderInput.m_Name
+      value: Left Shoulder Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: rightTriggerInput.m_Name
+      value: Right Trigger Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: rightShoulderInput.m_Name
+      value: Right Shoulder Input
+      objectReference: {fileID: 0}
     - target: {fileID: 3268374746560790791, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
       propertyPath: m_RootOrder
       value: 0

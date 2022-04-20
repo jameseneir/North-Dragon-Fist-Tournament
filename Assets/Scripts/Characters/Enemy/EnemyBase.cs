@@ -341,7 +341,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         StopCoroutine(MoveForward());
     }
 
-    public override void EnterAttackState()
+    public override void EnterAttackState(int index)
     {
         audioSource.PlayOneShot(enemy.attackSFX[currentAttack], UnityEngine.Random.Range(0.8f, 1));
     }

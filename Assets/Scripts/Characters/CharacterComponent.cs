@@ -45,7 +45,7 @@ public class CharacterComponent : MonoBehaviour
 
     }
 
-    public virtual void EnterAttackState()
+    public virtual void EnterAttackState(int index)
     {
 
     }

@@ -296,10 +296,9 @@ public class PlayerBase : CharacterComponent
     int attackCount;
     protected virtual void SpecialAttack()
     {
-        if(isAttacking && confidence < data[attackCount + 1].confidenceCost)
+        if(isAttacking && confidence < data[attackCount + 1].confidenceCost && attackCount != 0)
         {
             Attack(attackCount + 1);
-            attackCount = 0;
             confidence -= data[attackCount + 1].confidenceCost;
             confidenceMeter.value = confidence;
         }
@@ -330,19 +329,12 @@ public class PlayerBase : CharacterComponent
         attackVFX[index].SetActive(false);
     }
 
-    public override void EnterAttackState()
+    public override void EnterAttackState(int index)
     {
         cannotMove = true;
         isAttacking = true;
         audioSource.PlayOneShot(stats.attackSFX[currentAttack], Random.Range(0.8f, 1));
-        if (attackCount == 3)
-        {
-            attackCount = 1;
-        }
-        else
-        {
-            attackCount++;
-        }
+        attackCount = index;
     }
 
     bool isMovingForward;
