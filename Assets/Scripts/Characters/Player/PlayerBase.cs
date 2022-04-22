@@ -74,8 +74,6 @@ public class PlayerBase : CharacterComponent
     PlayerUpgrades playerUpgrades;
 
     #region Attack
-    protected RaycastHit[] buffer;
-
     public List<AttackData> data;
 
     [SerializeField]
@@ -93,6 +91,10 @@ public class PlayerBase : CharacterComponent
     HitBox[] hitBoxes;
 
     [SerializeField]
+    protected Collider[] buffer;
+    protected Collider target;
+
+    [SerializeField]
     protected LayerMask enemyLayer;
 
     [SerializeField]
@@ -100,9 +102,6 @@ public class PlayerBase : CharacterComponent
 
     [SerializeField]
     protected Vector3 proximityBox;
-
-    [SerializeField]
-    float snapDuration;
 
     int confidence;
     readonly int maxConfidence = 30;
@@ -142,7 +141,7 @@ public class PlayerBase : CharacterComponent
         controller.Move(-0.5f * Vector3.up);
         stepOffset = controller.stepOffset;
 
-        buffer = new RaycastHit[3];
+        
         for (int i = 0; i < data.Count; i++)
         {
             data[i].animatorHashesIndex = Animator.StringToHash(data[i].animatorTriggerName);
@@ -222,19 +221,19 @@ public class PlayerBase : CharacterComponent
                 StopGuarding();
         };
 
-        //lock to enemy
-        leftShoulderInput.action.performed += ctx =>
-        {
-            
-        };
-
         //pick up weapon
-        rightShoulderInput.action.performed += ctx =>
+        leftShoulderInput.action.performed += ctx =>
         {
             if (weaponDetected)
             {
                 EquipWeapon();
             }
+        };
+
+        
+        rightShoulderInput.action.performed += ctx =>
+        {
+            
         };
         #endregion
         SetUp();
@@ -290,6 +289,56 @@ public class PlayerBase : CharacterComponent
         }
         currentAttack = index;
         anim.SetTrigger(data[index].animatorHashesIndex);
+        int inRange = Physics.OverlapBoxNonAlloc(transform.position + offset, proximityBox, buffer, Quaternion.identity, enemyLayer, QueryTriggerInteraction.Ignore);
+        if (inRange == 0)
+            return;
+        switch(inRange)
+        {
+            case 1:
+                target = buffer[1];
+                break;
+            case 2:
+                if(target == null || (target != buffer[0] && target != buffer[1]))
+                {
+                    if(transform.position.SqurDistance(buffer[0].transform.position) < transform.position.SqurDistance(buffer[1].transform.position))
+                    {
+                        target = buffer[0];
+                    }
+                    else
+                    {
+                        target = buffer[1];
+                    }
+                }
+                break;
+            case 3:
+                if (target == null || (target != buffer[0] && target != buffer[1] && target != buffer[2]))
+                {
+                    if (transform.position.SqurDistance(buffer[0].transform.position) < transform.position.SqurDistance(buffer[1].transform.position))
+                    {
+                        if (transform.position.SqurDistance(buffer[0].transform.position) < transform.position.SqurDistance(buffer[2].transform.position))
+                        {
+                            target = buffer[0];
+                        }
+                        else
+                        {
+                            target = buffer[2];
+                        }
+                    }
+                    else
+                    {
+                        if (transform.position.SqurDistance(buffer[1].transform.position) < transform.position.SqurDistance(buffer[2].transform.position))
+                        {
+                            target = buffer[1];
+                        }
+                        else
+                        {
+                            target = buffer[2];
+                        }
+                    }
+                }
+                break;
+        }
+        transform.LookAt(target.transform, transform.up);
     }
 
     int attackCount;

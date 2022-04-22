@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Enemy Locking",
+                    "name": "Right Shoulder",
                     "type": "Button",
                     "id": "f08e29e0-41a9-4643-a690-a9566260b2a9",
                     "expectedControlType": "Button",
@@ -227,7 +227,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "Enemy Locking",
+                    "action": "Right Shoulder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -238,7 +238,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Enemy Locking",
+                    "action": "Right Shoulder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
