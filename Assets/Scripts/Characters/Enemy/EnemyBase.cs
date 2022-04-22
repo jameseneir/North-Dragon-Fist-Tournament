@@ -415,7 +415,11 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         audioSource.PlayOneShot(enemy.hurtSFX);
         isHurt = true;
         state = 4;
-        anim.SetTrigger(hurtTriggerName);
+        if (!use2ndHurtAnim)
+            anim.SetTrigger(hurtTriggerName);
+        else
+            anim.SetTrigger(hurt2TriggerName);
+        use2ndHurtAnim = !use2ndHurtAnim;
     }
 
     public override void Die()

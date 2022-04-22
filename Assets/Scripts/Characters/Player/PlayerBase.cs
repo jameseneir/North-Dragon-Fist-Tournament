@@ -8,31 +8,31 @@ public class PlayerBase : CharacterComponent
 {
     #region Input
     [SerializeField]
-    InputAction moveAction;
+    InputActionReference moveAction;
 
     [SerializeField]
-    InputAction southButtonInput;
+    InputActionReference southButtonInput;
 
     [SerializeField]
-    InputAction northButtonInput;
+    InputActionReference northButtonInput;
 
     [SerializeField]
-    InputAction eastButtonInput;
+    InputActionReference eastButtonInput;
 
     [SerializeField]
-    InputAction westButtonInput;
+    InputActionReference westButtonInput;
 
     [SerializeField]
-    InputAction leftTriggerInput;
+    InputActionReference leftTriggerInput;
 
     [SerializeField]
-    InputAction rightTriggerInput;
+    InputActionReference rightTriggerInput;
 
     [SerializeField]
-    InputAction leftShoulderInput;
+    InputActionReference leftShoulderInput;
 
     [SerializeField]
-    InputAction rightShoulderInput;
+    InputActionReference rightShoulderInput;
     #endregion
 
     [SerializeField]
@@ -149,8 +149,7 @@ public class PlayerBase : CharacterComponent
         }
 
         #region SetUpInput
-        //move
-        moveAction.started += ctx =>
+        moveAction.action.started += ctx =>
         {
             if (!cannotMove)
             {
@@ -161,7 +160,7 @@ public class PlayerBase : CharacterComponent
                 }
             }
         };
-        moveAction.performed += ctx =>
+        moveAction.action.performed += ctx =>
         {
             if (!cannotMove)
             {
@@ -173,7 +172,7 @@ public class PlayerBase : CharacterComponent
             }
         };
 
-        moveAction.canceled += ctx =>
+        moveAction.action.canceled += ctx =>
         {
             if (move)
             {
@@ -182,7 +181,7 @@ public class PlayerBase : CharacterComponent
         };
 
         //jump
-        southButtonInput.performed += ctx =>
+        southButtonInput.action.performed += ctx =>
         {
             if (controller.isGrounded && !cannotMove)
             {
@@ -191,16 +190,16 @@ public class PlayerBase : CharacterComponent
         };
 
         //special attack
-        northButtonInput.performed += ctx => SpecialAttack();
+        northButtonInput.action.performed += ctx => SpecialAttack();
 
         //kick
-        eastButtonInput.performed += ctx => Attack(1);
+        eastButtonInput.action.performed += ctx => Attack(1);
 
         //light attack
-        westButtonInput.performed += ctx => Attack(0);
+        westButtonInput.action.performed += ctx => Attack(0);
 
         //dash
-        leftTriggerInput.performed += ctx =>
+        leftTriggerInput.action.performed += ctx =>
         {
             if (controller.isGrounded && !cannotMove)
             {
@@ -209,7 +208,7 @@ public class PlayerBase : CharacterComponent
         };
 
         //guarding
-        rightTriggerInput.performed += ctx =>
+        rightTriggerInput.action.performed += ctx =>
         {
             if (isHurt || !controller.isGrounded)
                 return;
@@ -217,20 +216,20 @@ public class PlayerBase : CharacterComponent
                 StartGuarding();
         };
 
-        rightTriggerInput.canceled += ctx =>
+        rightTriggerInput.action.canceled += ctx =>
         {
             if (isGuarding)
                 StopGuarding();
         };
 
         //lock to enemy
-        leftShoulderInput.performed += ctx =>
+        leftShoulderInput.action.performed += ctx =>
         {
             
         };
 
         //pick up weapon
-        rightShoulderInput.performed += ctx =>
+        rightShoulderInput.action.performed += ctx =>
         {
             if (weaponDetected)
             {
@@ -418,7 +417,11 @@ public class PlayerBase : CharacterComponent
     {
         isHurt = true;
         audioSource.PlayOneShot(stats.hurtSFX);
-        anim.SetTrigger(hurtTriggerName);
+        if (!use2ndHurtAnim)
+            anim.SetTrigger(hurtTriggerName);
+        else
+            anim.SetTrigger(hurt2TriggerName);
+        use2ndHurtAnim = !use2ndHurtAnim;
         cannotMove = true;
         cannotAttack = true;
         if (move)

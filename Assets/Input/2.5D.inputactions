@@ -15,7 +15,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Heavy Attack",
+                    "name": "Special Attack",
                     "type": "Button",
                     "id": "4f4fcc6e-5122-434e-b965-fbb7e619666a",
                     "expectedControlType": "Button",
@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EastButton",
+                    "name": "Kick",
                     "type": "Button",
                     "id": "3ee2c651-9c75-4d22-8d13-3a8ca4a05eae",
                     "expectedControlType": "Button",
@@ -42,12 +42,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LeftTrigger",
+                    "name": "Dash",
                     "type": "Button",
                     "id": "868ec8bf-5c32-4ab4-843b-2103be35b95a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(pressPoint=0.3,behavior=2)",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LeftShoulder",
+                    "name": "Enemy Locking",
                     "type": "Button",
                     "id": "f08e29e0-41a9-4643-a690-a9566260b2a9",
                     "expectedControlType": "Button",
@@ -69,7 +69,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RightShoulder",
+                    "name": "Pick Up Weapon",
                     "type": "Button",
                     "id": "9f6f60f3-761e-4e40-bc63-e4c259e0e684",
                     "expectedControlType": "Button",
@@ -117,7 +117,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "Heavy Attack",
+                    "action": "Special Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -128,7 +128,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Heavy Attack",
+                    "action": "Special Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -139,7 +139,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "EastButton",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -150,7 +150,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "EastButton",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -183,7 +183,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "LeftTrigger",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -194,7 +194,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "LeftTrigger",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -227,7 +227,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "LeftShoulder",
+                    "action": "Enemy Locking",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -238,7 +238,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "LeftShoulder",
+                    "action": "Enemy Locking",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -249,7 +249,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "RightShoulder",
+                    "action": "Pick Up Weapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -260,7 +260,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "RightShoulder",
+                    "action": "Pick Up Weapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

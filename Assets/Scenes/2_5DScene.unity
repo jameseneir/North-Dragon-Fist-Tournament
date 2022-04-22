@@ -787,8 +787,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 187981666}
-  m_LocalRotation: {x: 0.21999721, y: -0.6720127, z: 0.21999711, w: 0.67201304}
-  m_LocalPosition: {x: 30.000004, y: 30, z: 7.999982}
+  m_LocalRotation: {x: 0.21999724, y: -0.67201257, z: 0.21999708, w: 0.6720131}
+  m_LocalPosition: {x: 30.000006, y: 30, z: 7.999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4509,7 +4509,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3333334, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4525,7 +4525,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210340473}
-  m_LocalRotation: {x: 0.21999721, y: -0.6720127, z: 0.21999711, w: 0.67201304}
+  m_LocalRotation: {x: 0.21999724, y: -0.67201257, z: 0.21999708, w: 0.6720131}
   m_LocalPosition: {x: 30, y: 30, z: -0.000019073486}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6423,86 +6423,6 @@ PrefabInstance:
       propertyPath: confidenceMeter
       value: 
       objectReference: {fileID: 1177619134}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: moveAction.m_Id
-      value: f05aee70-50ad-479e-852a-fb379e3b89bd
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: moveAction.m_Name
-      value: Move
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: eastButtonInput.m_Id
-      value: eecb4365-b739-4afc-bbe8-721807e94e9d
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: westButtonInput.m_Id
-      value: c9bc6006-cfb9-4358-bd6b-d91c5885b1a5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: leftTriggerInput.m_Id
-      value: 5569d30a-13f5-4531-87e4-86deda20ec13
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: northButtonInput.m_Id
-      value: e2e037fc-65d4-4e30-98c1-5f431e78f215
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: southButtonInput.m_Id
-      value: cb41c757-34c2-4d0f-9ea3-bdeda66a9086
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: eastButtonInput.m_Name
-      value: East Button Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: hitBoxes.Array.data[0]
-      value: 
-      objectReference: {fileID: 1689662916}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: hitBoxes.Array.data[1]
-      value: 
-      objectReference: {fileID: 1812502926}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: leftShoulderInput.m_Id
-      value: 4fd424ca-a2bf-4c22-a598-e3c1f960caed
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: rightTriggerInput.m_Id
-      value: da668e6a-536f-49bf-9b51-b9bbf6b7214d
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: westButtonInput.m_Name
-      value: West Button Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: leftTriggerInput.m_Name
-      value: Left Trigger Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: northButtonInput.m_Name
-      value: North Button Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: rightShoulderInput.m_Id
-      value: c7e099b7-5694-44e0-ae51-e582edb46c9c
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: southButtonInput.m_Name
-      value: South Button Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: leftShoulderInput.m_Name
-      value: Left Shoulder Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: rightTriggerInput.m_Name
-      value: Right Trigger Input
-      objectReference: {fileID: 0}
-    - target: {fileID: 2814439725483646522, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: rightShoulderInput.m_Name
-      value: Right Shoulder Input
-      objectReference: {fileID: 0}
     - target: {fileID: 3268374746560790791, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -6551,10 +6471,6 @@ PrefabInstance:
       propertyPath: HPSlider
       value: 
       objectReference: {fileID: 362407888}
-    - target: {fileID: 6714799898476138770, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
 --- !u!114 &1679639663 stripped
@@ -6649,17 +6565,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682241375}
   m_CullTransparentMesh: 1
---- !u!114 &1689662916 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3615968837647358163, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-  m_PrefabInstance: {fileID: 1679639662}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 017b13be80d1044c98a3f0dd6d214d7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1692202149 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1044468907826179785, guid: 6ea03db1fff074e62930e302bfc32274, type: 3}
@@ -7251,17 +7156,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Asset: {fileID: -944628639613478452, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
   m_ActionId: 9a425eb0-8174-4ce6-9ba0-fb9eb08c281e
---- !u!114 &1812502926 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7591594695419947898, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
-  m_PrefabInstance: {fileID: 1679639662}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 017b13be80d1044c98a3f0dd6d214d7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1855045583
 GameObject:
   m_ObjectHideFlags: 0

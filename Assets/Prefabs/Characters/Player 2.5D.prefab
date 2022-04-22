@@ -159,6 +159,7 @@ MonoBehaviour:
   targetLayer: 9
   damage: 60
   player: {fileID: 2814439725483646522}
+  confidenceIncreaseOnHit: 0
 --- !u!1 &189953209800965507
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,7 +1027,15 @@ MonoBehaviour:
   weaponDetected: 0
   isUsingWeapon: 0
   weaponPivot: {fileID: 3302660284713870577}
-  input: {fileID: 1479678703694937181}
+  moveAction: {fileID: -2403912523564351171, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  southButtonInput: {fileID: 7740813296840104321, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  northButtonInput: {fileID: -7812267715396408425, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  eastButtonInput: {fileID: -444730198640126974, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  westButtonInput: {fileID: 5591978078471073640, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  leftTriggerInput: {fileID: 9195110360138207655, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  rightTriggerInput: {fileID: -4033534116930834722, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  leftShoulderInput: {fileID: 4938402345553596884, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
+  rightShoulderInput: {fileID: 2095994105257624185, guid: a3d07ec53548e411193cec5a914d9784, type: 3}
   audioSource: {fileID: 612607188942881175}
   controller: {fileID: 3302660285301730701}
   gravity: -49.050003
@@ -1042,8 +1051,8 @@ MonoBehaviour:
   - {fileID: 1460000743933121064}
   - {fileID: 6714799898476138770}
   hitBoxes:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3615968837647358163}
+  - {fileID: 7591594695419947898}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -1053,10 +1062,11 @@ MonoBehaviour:
   confidenceMeter: {fileID: 0}
   gameOverPanel: {fileID: 0}
   cam: {fileID: 0}
-  screenShakeIntensity: 0
-  screenShakeDuration: 0
-  dashSpeed: 0
-  dashDuration: 0
+  screenShakeIntensity: 0.1
+  screenShakeDuration: 0.1
+  timeStopDuration: 0.1
+  dashSpeed: 30
+  dashDuration: 1
   rotateSpeed: 15
 --- !u!114 &3302660284451382947
 MonoBehaviour:
@@ -2929,6 +2939,7 @@ MonoBehaviour:
   targetLayer: 9
   damage: 30
   player: {fileID: 2814439725483646522}
+  confidenceIncreaseOnHit: 0
 --- !u!1 &5827962458571010244
 GameObject:
   m_ObjectHideFlags: 0

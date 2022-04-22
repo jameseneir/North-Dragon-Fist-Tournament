@@ -12,14 +12,17 @@ public class CharacterComponent : MonoBehaviour
     public bool isUsingWeapon;
     protected Weapon currentWeapon;
     protected Weapon detectedWeapon;
+    
 
     public Transform weaponPivot;
 
     protected bool cannotAttack;
+    protected bool use2ndHurtAnim;
 
     protected readonly int moveHash = Animator.StringToHash("Moving");
     protected readonly int jumpTriggerName = Animator.StringToHash("Jump");
     protected readonly int hurtTriggerName = Animator.StringToHash("Hurt");
+    protected readonly int hurt2TriggerName = Animator.StringToHash("Hurt 2");
     protected readonly int dieTriggerName = Animator.StringToHash("Die");
     protected readonly int guardingBoolName = Animator.StringToHash("Guarding");
     protected readonly int pickUpWeaponTriggerName = Animator.StringToHash("PickUp");
