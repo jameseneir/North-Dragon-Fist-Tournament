@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class TemporaryMP : MonoBehaviour
 {
-    public int currentMP;
+    public static int currentMP;
 
     public void PlayerWin()
     {
-        MemoryPoint.ChangeMemoryPoint(currentMP);
+        MemoryPoint.AddMemoryPoint(currentMP);
     }
 }
