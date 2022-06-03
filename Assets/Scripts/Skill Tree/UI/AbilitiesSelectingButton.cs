@@ -7,7 +7,7 @@ public class AbilitiesSelectingButton : MonoBehaviour
 
     public void SelectAbility()
     {
-        GameManager.Instance.data.Add(data);
+        UnlockedList.instance.AddAbility(data);
     }
 }
 

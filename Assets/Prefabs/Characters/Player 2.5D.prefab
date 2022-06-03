@@ -856,7 +856,6 @@ GameObject:
   - component: {fileID: 2814439725483646522}
   - component: {fileID: 3302660284451382947}
   - component: {fileID: 3302660285301730701}
-  - component: {fileID: 548309059}
   - component: {fileID: 612607188942881175}
   m_Layer: 6
   m_Name: Player 2.5D
@@ -1053,12 +1052,12 @@ MonoBehaviour:
   hitBoxes:
   - {fileID: 3615968837647358163}
   - {fileID: 7591594695419947898}
+  buffer: []
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
   offset: {x: 0, y: 7, z: 5}
   proximityBox: {x: 5, y: 1, z: 4}
-  snapDuration: 0
   confidenceMeter: {fileID: 0}
   gameOverPanel: {fileID: 0}
   cam: {fileID: 0}
@@ -1101,23 +1100,6 @@ CharacterController:
   m_SkinWidth: 0.1
   m_MinMoveDistance: 0.002
   m_Center: {x: 0, y: 5, z: 0}
---- !u!114 &548309059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2742772641079057341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d573351f69de7b94596a620cbedb0952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerXP: {fileID: 11400000, guid: aaf4b3439d5ae3d41b5d1a9e2eba5f1c, type: 2}
-  ResetXP: 1
-  XpSLider: {fileID: 0}
-  XP: 0
-  CurrentMaxXP: 5
 --- !u!82 &612607188942881175
 AudioSource:
   m_ObjectHideFlags: 0

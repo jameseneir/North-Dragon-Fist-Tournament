@@ -18,4 +18,11 @@ public class GamePlayManager : MonoBehaviour
         }
         Target = player.transform;
     }
+
+    public static int currentMP;
+
+    public void PlayerWin()
+    {
+        MemoryPoint.AddMemoryPoint(currentMP);
+    }
 }

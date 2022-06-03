@@ -15,23 +15,22 @@ public class PoolObject : MonoBehaviour
         }
         if (lifetime > 0f)
         {
-            turnOffRoutine = StartCoroutine(_ScheduleOff());
+            turnOffRoutine = StartCoroutine(ScheduleOff());
         }
     }
 
     public void TurnOff()
     {
         transform.parent = PoolingManager.Instance.PooledObjectsParent.transform;
-        transform.position = Vector3.zero;
-        transform.rotation = Quaternion.identity;
+        transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         PoolingManager.Instance.AddObject(this);
     }
 
-    IEnumerator _ScheduleOff()
+    IEnumerator ScheduleOff()
     {
         yield return new WaitForSeconds(lifetime);
 
-        if (!PoolingManager.Instance.PoolDictionary[poolObjectType].Contains(this.gameObject))
+        if (!PoolingManager.Instance.PoolDictionary[poolObjectType].Contains(gameObject))
         {
             TurnOff();
         }

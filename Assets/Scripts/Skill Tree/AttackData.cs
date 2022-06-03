@@ -9,4 +9,5 @@ public class AttackData : ScriptableObject
     public bool multiTargetAttack;
     public int confidenceCost;
     public AudioClip hitSFX;
+    public Sprite abilityIcon;
 }

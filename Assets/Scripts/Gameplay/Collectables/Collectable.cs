@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum CollectableType
@@ -10,6 +8,9 @@ public enum CollectableType
 
 public class Collectable : MonoBehaviour
 {
+    [SerializeField]
+    LayerMask playerLayer;
+
     public CollectableType collectableType;
 
     PoolObject PoolObject;
@@ -21,10 +22,9 @@ public class Collectable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerBase player = other.gameObject.GetComponent<PlayerBase>();
-        if (player != null)
+        if(other.gameObject.layer == playerLayer)
         {
-            player.GetItem(collectableType);
+            GamePlayManager.currentMP += 1;
             PoolObject.TurnOff();
         }
     }

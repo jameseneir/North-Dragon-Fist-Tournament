@@ -71,8 +71,6 @@ public class PlayerBase : CharacterComponent
     [SerializeField]
     protected Animator anim;
 
-    PlayerUpgrades playerUpgrades;
-
     #region Attack
     public List<AttackData> data;
 
@@ -136,7 +134,6 @@ public class PlayerBase : CharacterComponent
 
     private void Start()
     {
-        playerUpgrades = GetComponent<PlayerUpgrades>();
         jumpVelocity = Mathf.Sqrt(stats.jumpHeight * -2 * gravity);
         controller.Move(-0.5f * Vector3.up);
         stepOffset = controller.stepOffset;
@@ -736,16 +733,6 @@ public class PlayerBase : CharacterComponent
         anim.SetBool(dashHash, false);
     }
     #endregion
-
-    public void GetItem(CollectableType collectableType)
-    {
-        switch(collectableType)
-        {
-            case CollectableType.GEM:
-                playerUpgrades.EarnXPPoints();
-                break;
-        }
-    }
 
     private void OnAnimatorMove()
     {

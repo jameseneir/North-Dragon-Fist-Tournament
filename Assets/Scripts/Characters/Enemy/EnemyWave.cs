@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class EnemyWave : MonoBehaviour
 {
@@ -21,8 +21,7 @@ public class EnemyWave : MonoBehaviour
     PlayerBase player;
 
     [SerializeField]
-    float roleReassignInterval;
-    WaitForSeconds countDown;
+    int roleReassignIntervalInMilliSeconds;
 
     [SerializeField]
     bool hardMode;
@@ -56,25 +55,26 @@ public class EnemyWave : MonoBehaviour
                 enemy.GetComponent<Health>().HPSlider = enemyHealthSlider;
             }
         }
-        countDown = new WaitForSeconds(roleReassignInterval);
-        StartCoroutine(ReassignRole());
+        ReassignRoleAsync();
     }
 
-    bool wait;
-    IEnumerator ReassignRole()
+    bool skipThisTime;
+
+    private async void ReassignRoleAsync()
     {
         while(enemies.Count > 1)
         {
-            yield return countDown;
-            if(wait)
+            await Task.Delay(roleReassignIntervalInMilliSeconds);
+            if (skipThisTime)
             {
-                wait = false;
+                skipThisTime = false;
             }
             else
             {
                 AssignRole();
             }
         }
+        
     }
 
     int random;
@@ -182,7 +182,7 @@ public class EnemyWave : MonoBehaviour
         else
         {
             AssignRole();
-            wait = true;
+            skipThisTime = true;
         }
     }
 }
