@@ -13,8 +13,9 @@ public class HitBox : MonoBehaviour
         {
             if(hitVFX != null)
             {
-                hitVFX.SetActive(true);
-                hitVFX.transform.position = other.ClosestPointOnBounds(transform.position);
+                PoolingManager.Instance.SpawnObj(PoolObjectType.HIT_IMPACT_01, other.ClosestPointOnBounds(transform.position), null);
+                //hitVFX.SetActive(true);
+                //hitVFX.transform.position = other.ClosestPointOnBounds(transform.position);
             }
             Damage(other.GetComponent<Health>());
         }

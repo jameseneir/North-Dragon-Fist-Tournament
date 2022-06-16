@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2090705975}
-  m_IndirectSpecularColor: {r: 0.008975642, g: 0.013044867, b: 0.02042249, a: 1}
+  m_IndirectSpecularColor: {r: 0.009012722, g: 0.013102869, b: 0.020503528, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -787,7 +787,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 187981666}
-  m_LocalRotation: {x: 0.08398723, y: -0.70210093, z: 0.083987154, w: 0.7021016}
+  m_LocalRotation: {x: 0.08398723, y: -0.7021009, z: 0.08398715, w: 0.7021016}
   m_LocalPosition: {x: 20.600008, y: 13, z: 7.999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4509,7 +4509,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.165725, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4525,7 +4525,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210340473}
-  m_LocalRotation: {x: 0.08398723, y: -0.70210093, z: 0.083987154, w: 0.7021016}
+  m_LocalRotation: {x: 0.08398723, y: -0.7021009, z: 0.08398715, w: 0.7021016}
   m_LocalPosition: {x: 20.6, y: 13, z: -0.000019073486}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4862,6 +4862,31 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243835240}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1249290027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1460000743933121058, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+  m_PrefabInstance: {fileID: 1679639662}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1249290030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249290027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1250017437
 GameObject:
   m_ObjectHideFlags: 0
@@ -6471,6 +6496,34 @@ PrefabInstance:
       propertyPath: HPSlider
       value: 
       objectReference: {fileID: 362407888}
+    - target: {fileID: 4709022517050654018, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4709022517050654018, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 4709022517050654018, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 4709022517050654018, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4709022517050654018, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4709022517050654018, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503801109583035870, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af135e5b35eb44cdfacf632ef3fd8988, type: 3}
 --- !u!114 &1679639663 stripped
