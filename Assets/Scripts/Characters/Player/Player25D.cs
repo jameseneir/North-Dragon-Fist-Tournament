@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class Player25D : PlayerBase
 {
-    readonly int vel = Animator.StringToHash("Velocity");
-    Vector3 destination;
     [SerializeField]
     float rotateSpeed;
+    readonly int vel = Animator.StringToHash("Velocity");
+    Vector3 destination;
+
     protected override IEnumerator Move()
     {
         while(move)
@@ -16,7 +17,7 @@ public class Player25D : PlayerBase
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(destination, transform.up), rotateSpeed * Time.deltaTime);
             if (isJumping)
             {
-                velocity = direction.magnitude * midAirMoveSpeed * transform.forward + Vector3.up * yVel;
+                velocity = direction.magnitude * midAirMoveSpeed * transform.forward + Vector3.up * yVelocity;
                 controller.Move(velocity * Time.deltaTime);
             }
             else
@@ -32,7 +33,7 @@ public class Player25D : PlayerBase
                     }
                     else
                     {
-                        velocity = direction.magnitude * midAirMoveSpeed * transform.forward + Vector3.up * yVel;
+                        velocity = direction.magnitude * midAirMoveSpeed * transform.forward + Vector3.up * yVelocity;
                         controller.Move(velocity * Time.deltaTime);
                     }
                 }

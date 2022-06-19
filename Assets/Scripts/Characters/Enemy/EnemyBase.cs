@@ -4,24 +4,22 @@ using System;
 
 public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
 {
-    [HideInInspector]
-    public EnemyWave wave;
+    public EnemyStats enemyStats;
 
+    #region Movement
     protected Transform target;
     [SerializeField]
     protected Animator anim;
     [SerializeField]
     protected CharacterController controller;
-
     protected PlayerBase player;
-
     protected Vector3 toPlayer = Vector3.zero;
-
     public float Distance { get; private set; }
-    float closeDistance;
-    float farDistance;
-    float atkRange;
 
+    Vector3 velocity;
+    #endregion
+
+    #region Attack
     [SerializeField]
     AttackData[] data;
 
@@ -31,48 +29,99 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     [SerializeField]
     HitBox[] hitBoxes;
 
-    public EnemyStats enemy;
+    WaitForSeconds atkCoolDown;
+
+    int currentAttack;
+    bool hitboxEnabled, vfxEnabled;
+    #endregion
+
+    #region StateMachine
     public int State { get { return state; } }
     int state = -1;
     // 0: engage, 1: keep close distance, 2: keep far distance, 3: attacking, 4: hurt
     int previousState;
-    //0: move closer, 1: idle, 2: back away, 3: guarding
-    int substate;
+
+    Enum currentSubState;
+    enum SubState
+    {
+        MOVE_CLOSER,
+        IDLE,
+        BACK_AWAY,
+        GUARDING,
+    }
 
     protected bool move;
-    WaitForSeconds atkCoolDown;
     WaitForSeconds stateUpdate;
     bool close;
     WaitForSeconds slowStateUpdate;
     WaitForSeconds fastStateUpdate;
 
+    float closeDistance;
+    float farDistance;
+    float atkRange;
+    #endregion
+
     protected float animationBlendDamp;
+
     [SerializeField]
     float randomAwakeDelay = 3f;
 
     [SerializeField]
     AudioSource audioSource;
+
+    [HideInInspector]
+    public EnemyWave wave;
     // Start is called before the first frame update
     void Start()
     {
-        animationBlendDamp = enemy.animationBlendDamp;
+        animationBlendDamp = enemyStats.animationBlendDamp;
         #region Set up ranges
-        float randomRange = enemy.randomNoise;
+        float randomRange = enemyStats.randomNoise;
         float initial = randomRange;
         randomRange = UnityEngine.Random.Range(-initial, initial);
-        closeDistance = enemy.closeDistance * enemy.closeDistance + randomRange;
-        farDistance = enemy.farDistance * enemy.farDistance + randomRange;
-        atkRange = enemy.attackRange * enemy.attackRange;
+        closeDistance = enemyStats.closeDistance * enemyStats.closeDistance + randomRange;
+        farDistance = enemyStats.farDistance * enemyStats.farDistance + randomRange;
+        atkRange = enemyStats.attackRange * enemyStats.attackRange;
         #endregion
 
-        atkCoolDown = new WaitForSeconds(enemy.attackCooldown);
-        slowStateUpdate = new WaitForSeconds(enemy.slowStateUpdateInterval);
-        fastStateUpdate = new WaitForSeconds(enemy.fastStateUpdateInterval);
+        atkCoolDown = new WaitForSeconds(enemyStats.attackCooldown);
+        slowStateUpdate = new WaitForSeconds(enemyStats.slowStateUpdateInterval);
+        fastStateUpdate = new WaitForSeconds(enemyStats.fastStateUpdateInterval);
         stateUpdate = slowStateUpdate;
 
+        //parse animator string values to hashes to improve performance
         for (int i = 0; i < data.Length; i++)
         {
             data[i].animatorHashesIndex = Animator.StringToHash(data[i].animatorTriggerName);
+        }
+    }
+
+    private void Update()
+    {
+        //skip update if the enemy is attacking, hurt or dead
+        if (state > 2 || state < 0)
+            return;
+
+        toPlayer = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+        LookAtPlayer();
+
+        switch (currentSubState)
+        {
+            case SubState.MOVE_CLOSER:
+                MoveCloser();
+                break;
+            case SubState.IDLE:
+                Idle();
+                break;
+            case SubState.BACK_AWAY:
+                BackAway();
+                break;
+                /*case 3:
+                    if(!isGuarding)
+                    {
+                        StartGuarding();
+                    }
+                    break;*/
         }
     }
 
@@ -83,23 +132,25 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         wave = enemyWave;
         state = 0;
         randomAwakeDelay = UnityEngine.Random.Range(0f, 3f);
-        Invoke(nameof(EnemyAwake), randomAwakeDelay);
+        Invoke(nameof(StartEnemyUpdate), randomAwakeDelay);
     }
 
-    void EnemyAwake()
+    void StartEnemyUpdate()
     {
-        StartCoroutine(StateCheck());
+        StartCoroutine(ChangeStateIfNeeded());
     }
 
     public void AssignRole(int role)
     {
+        //if the enemy is in attacking state or hurt state
+        //we will assign the role later on when that state is finished
         if (state < 3)
             state = role;
         else
             previousState = role;
     }
 
-    IEnumerator StateCheck()
+    IEnumerator ChangeStateIfNeeded()
     {
         while(state < 3)
         {
@@ -108,145 +159,142 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
             Distance = toPlayer.sqrMagnitude;
             if (state == 0)
             {
-                if (Distance > closeDistance)
-                {
-                    substate = 0;
-                }
-                else
-                {
-                    if(!close)
-                    {
-                        close = true;
-                        stateUpdate = fastStateUpdate;
-                    }
-                    if (Distance > atkRange)
-                    {
-                        if (cannotAttack)
-                        {
-                            substate = 1;
-                        }
-                        else
-                        {
-                            substate = 0;
-                        }
-                    }
-                    else
-                    {
-                        if (cannotAttack)
-                        {
-                            //idle
-                            substate = 1;
-                            //guarding
-                            //substate = 3;
-
-                        }
-                        else
-                        {
-                            SelectAttack();
-                        }
-                    }
-                }
+                Engage();
             }
-
-            //keeping close distance
             else if (state == 1)
             {
-                if (Distance > closeDistance)
-                {
-                    substate = 0;
-                    if(close)
-                    {
-                        close = false;
-                        stateUpdate = slowStateUpdate;
-                    }
-                }
-                else if (Distance > atkRange)
-                {
-                    substate = 1;
-                    if(!close)
-                    {
-                        close = true;
-                        stateUpdate = fastStateUpdate;
-                    }
-                }
-                else
-                {
-                    if (!close)
-                    {
-                        close = true;
-                        stateUpdate = fastStateUpdate;
-                    }
-                    if (!cannotAttack)
-                    {
-                        SelectAttack();
-                    }
-                    else
-                    {
-                        substate = 2;
-                    }
-                }
+                KeepCloseDistance();
             }
-            //keeping far distance
             else if (state == 2)
             {
-                if (Distance > farDistance)
+                KeepFarDistance();
+            }
+        }
+    }
+
+    void Engage()
+    {
+        if (Distance > closeDistance)
+        {
+            currentSubState = SubState.MOVE_CLOSER;
+        }
+        else
+        {
+            if (!close)
+            {
+                close = true;
+                stateUpdate = fastStateUpdate;
+            }
+            if (Distance > atkRange)
+            {
+                if (cannotAttack)
                 {
-                    substate = 0;
-                    if (close)
-                    {
-                        close = false;
-                        stateUpdate = slowStateUpdate;
-                    }
-                }
-                else if (Distance > closeDistance)
-                {
-                    substate = 1;
-                    if (close)
-                    {
-                        close = false;
-                        stateUpdate = slowStateUpdate;
-                    }
+                    currentSubState = SubState.IDLE;
                 }
                 else
                 {
-                    substate = 2;
-                    if(!close)
-                    {
-                        close = true;
-                        stateUpdate = fastStateUpdate;
-                    }
+                    currentSubState = SubState.MOVE_CLOSER;
+                }
+            }
+            else
+            {
+                if (cannotAttack)
+                {
+                    //idle
+                    currentSubState = SubState.IDLE;
+                    //guarding
+                    //substate = 3;
+
+                }
+                else
+                {
+                    SelectAttack();
                 }
             }
         }
     }
 
-    private void Update()
+    void KeepCloseDistance()
     {
-        if (state > 2 || state < 0)
-            return;
-
-        toPlayer = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
-        LookAtPlayer();
-
-        switch(substate)
+        if (Distance > closeDistance)
         {
-            //move closer
-            case 0:
-                MoveCloser();
-                break;
-            case 1:
-                Idle();
-                break;
-            case 2:
-                BackAway();
-                break;
-            /*case 3:
-                if(!isGuarding)
-                {
-                    StartGuarding();
-                }
-                break;*/
+            currentSubState = SubState.MOVE_CLOSER;
+            if (close)
+            {
+                close = false;
+                stateUpdate = slowStateUpdate;
+            }
         }
+        else if (Distance > atkRange)
+        {
+            currentSubState = SubState.IDLE;
+            if (!close)
+            {
+                close = true;
+                stateUpdate = fastStateUpdate;
+            }
+        }
+        else
+        {
+            if (!close)
+            {
+                close = true;
+                stateUpdate = fastStateUpdate;
+            }
+            if (!cannotAttack)
+            {
+                SelectAttack();
+            }
+            else
+            {
+                currentSubState = SubState.BACK_AWAY;
+            }
+        }
+    }
+
+    void KeepFarDistance()
+    {
+        if (Distance > farDistance)
+        {
+            currentSubState = SubState.MOVE_CLOSER;
+            if (close)
+            {
+                close = false;
+                stateUpdate = slowStateUpdate;
+            }
+        }
+        else if (Distance > closeDistance)
+        {
+            currentSubState = SubState.IDLE;
+            if (close)
+            {
+                close = false;
+                stateUpdate = slowStateUpdate;
+            }
+        }
+        else
+        {
+            currentSubState = SubState.BACK_AWAY;
+            if (!close)
+            {
+                close = true;
+                stateUpdate = fastStateUpdate;
+            }
+        }
+    }
+
+    protected void Idle()
+    {
+        if (move)
+        {
+            move = false;
+            anim.SetBool(moveHash, false);
+        }
+    }
+
+    protected virtual void MoveToDestination(Vector3 destination)
+    {
+
     }
 
     protected virtual void BackAway()
@@ -259,7 +307,12 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
 
     }
 
-    #region attack
+    protected virtual void LookAtPlayer()
+    {
+
+    }
+
+    #region Attack
     protected virtual void SelectAttack()
     {
         //simple enemies only have 1 type of attack
@@ -267,7 +320,6 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         Attack(0);
     }
 
-    int currentAttack;
     void Attack(int index)
     {
         if(state < 3)
@@ -289,7 +341,6 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         }
     }
 
-    bool hitboxEnabled, vfxEnabled;
     public override void EnableHitbox(int index)
     {
         hitboxEnabled = true;
@@ -314,6 +365,39 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         attackVFX[index].SetActive(false);
     }
 
+    public override void EnterAttackState(int index)
+    {
+        audioSource.PlayOneShot(enemyStats.attackSFX[currentAttack], UnityEngine.Random.Range(0.8f, 1));
+    }
+
+    public override void ExitAttackState()
+    {
+        if (isDead)
+            return;
+        if (isMovingForward)
+        {
+            StopMovingForward();
+        }
+        if (vfxEnabled)
+        {
+            DisableAttackVFX(currentAttack);
+        }
+        if (hitboxEnabled)
+        {
+            DisableHitbox(currentAttack);
+        }
+        state = previousState;
+        StartCoroutine(ChangeStateIfNeeded());
+    }
+
+    IEnumerator AttackCoolDown()
+    {
+        yield return atkCoolDown;
+        cannotAttack = false;
+    }
+    #endregion
+
+    #region ForwardMovement
     bool isMovingForward;
     float forwardSpeed;
     public void StartMovingForward(float speed)
@@ -340,66 +424,16 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         isMovingForward = false;
         StopCoroutine(MoveForward());
     }
-
-    public override void EnterAttackState(int index)
-    {
-        audioSource.PlayOneShot(enemy.attackSFX[currentAttack], UnityEngine.Random.Range(0.8f, 1));
-    }
-
-    public override void ExitAttackState()
-    {
-        if (isDead)
-            return;
-        if (isMovingForward)
-        {
-            StopMovingForward();
-        }
-        if (vfxEnabled)
-        {
-            DisableAttackVFX(currentAttack);
-        }
-        if (hitboxEnabled)
-        {
-            DisableHitbox(currentAttack);
-        }
-        state = previousState;
-        StartCoroutine(StateCheck());
-    }
-
-    public void Damage()
-    {
-        if (isHurt || isDead)
-            return;
-    }
-
-    IEnumerator AttackCoolDown()
-    {
-        yield return atkCoolDown;
-        cannotAttack = false;
-    }
     #endregion
 
-    protected void Idle()
-    {
-        if (move)
-        {
-            move = false;
-            anim.SetBool(moveHash, false);
-        }
-    }
-
-    protected virtual void LookAtPlayer()
-    {
-
-    }
-
+    #region Hurt
     public override void ExitHurtState()
     {
         if (isDead)
             return;
         isHurt = false;
         state = previousState;
-        StartCoroutine(StateCheck());
+        StartCoroutine(ChangeStateIfNeeded());
     }
 
     public override void Hurt()
@@ -410,27 +444,28 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
                 move = false;
             anim.SetBool(moveHash, false);
             previousState = state;
-            StopCoroutine(StateCheck());
+            StopCoroutine(ChangeStateIfNeeded());
         }
-        audioSource.PlayOneShot(enemy.hurtSFX);
+        audioSource.PlayOneShot(enemyStats.hurtSFX);
         isHurt = true;
         state = 4;
-        if (!use2ndHurtAnim)
+        if (!use2HurtAnim)
             anim.SetTrigger(hurtTriggerName);
         else
             anim.SetTrigger(hurt2TriggerName);
-        use2ndHurtAnim = !use2ndHurtAnim;
+        use2HurtAnim = !use2HurtAnim;
     }
+    #endregion
 
     public override void Die()
     {
         state = 5;
         isDead = true;
-        audioSource.PlayOneShot(enemy.dieSFX);
+        audioSource.PlayOneShot(enemyStats.dieSFX);
         anim.SetTrigger(dieTriggerName);
         wave.EnemyDie(this);
         PoolingManager.Instance.SpawnObj(PoolObjectType.GEM, transform.position + new Vector3(0f, 2.5f, 0f), null);
-        Destroy(gameObject, enemy.dieAnimationDuration);
+        Destroy(gameObject, enemyStats.dieAnimationDuration);
     }
 
     public int CompareTo (EnemyBase other)
@@ -438,7 +473,6 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         return Mathf.RoundToInt(Distance - other.Distance);
     }
 
-    Vector3 velocity;
     void OnAnimatorMove()
     {
         velocity = anim.deltaPosition;

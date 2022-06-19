@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class Player3rdPerson : PlayerBase
 {
-    readonly int vel = Animator.StringToHash("Velocity");
     [SerializeField]
     float lookSensitivity;
 
@@ -16,14 +15,17 @@ public class Player3rdPerson : PlayerBase
 
     [SerializeField]
     InputAction lookInput;
-
-    Vector2 look;
-    bool rotate;
+    
     [SerializeField]
     float rotateSpeed;
 
+    Vector2 look;
+    bool rotate;
+
+    readonly int vel = Animator.StringToHash("Velocity");
+
     #region Set up
-    protected override void SetUp()
+    protected override void SetUpForChildClasses()
     {
         Cursor.lockState = CursorLockMode.Locked;
         lookInput.started += ctx =>
@@ -95,14 +97,14 @@ public class Player3rdPerson : PlayerBase
     {
         while (move)
         {
-            Quaternion cache = followTarget.transform.rotation;
+            Quaternion originalRotation = followTarget.transform.rotation;
             Vector3 forward = direction.x * viewTransform.transform.right + direction.y * viewTransform.transform.forward;
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(forward, transform.up), Time.deltaTime * rotateSpeed);
-            followTarget.transform.rotation = cache;
+            followTarget.transform.rotation = originalRotation;
             viewTransform.transform.localEulerAngles = new Vector3(0, followTarget.transform.localEulerAngles.y, 0);
             if (isJumping)
             {
-                velocity = midAirMoveSpeed * forward + Vector3.up * yVel;
+                velocity = midAirMoveSpeed * forward + Vector3.up * yVelocity;
                 controller.Move(velocity * Time.deltaTime);
             }
             else
@@ -118,7 +120,7 @@ public class Player3rdPerson : PlayerBase
                     }
                     else
                     {
-                        velocity = midAirMoveSpeed * forward + Vector3.up * yVel;
+                        velocity = midAirMoveSpeed * forward + Vector3.up * yVelocity;
                         controller.Move(velocity * Time.deltaTime);
                     }
                 }

@@ -6,6 +6,29 @@ public class Enemy25D : EnemyBase
     readonly int velX = Animator.StringToHash("Velocity X");
     readonly int velZ = Animator.StringToHash("Velocity Z");
     float speedX, speedZ;
+
+    protected override void MoveToDestination(Vector3 destination)
+    {
+        Vector3 toDestination = destination - transform.position;
+        if(toDestination.sqrMagnitude > 5)
+        {
+            speedX = toDestination.normalized.x;
+            speedZ = toDestination.normalized.z;
+            anim.SetFloat(velX, speedX, animationBlendDamp, Time.deltaTime);
+            anim.SetFloat(velZ, speedZ, animationBlendDamp, Time.deltaTime);
+            if (!move)
+            {
+                move = true;
+                anim.SetBool(moveHash, true);
+            }
+        }
+        else
+        {
+            //arrive
+        }
+        
+    }
+
     protected override void MoveCloser()
     {
         if(facingRight)

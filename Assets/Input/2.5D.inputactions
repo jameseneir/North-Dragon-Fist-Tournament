@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Kick",
+                    "name": "Grab",
                     "type": "Button",
                     "id": "3ee2c651-9c75-4d22-8d13-3a8ca4a05eae",
                     "expectedControlType": "Button",
@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Right Shoulder",
+                    "name": "Kick",
                     "type": "Button",
                     "id": "f08e29e0-41a9-4643-a690-a9566260b2a9",
                     "expectedControlType": "Button",
@@ -91,7 +91,7 @@
                 {
                     "name": "",
                     "id": "bec78fbf-5e7f-4bbd-95e4-37ab22c6ac66",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
@@ -124,7 +124,7 @@
                 {
                     "name": "",
                     "id": "538dde67-23b4-4900-b1c2-c3190f9d7ec1",
-                    "path": "<Keyboard>/j",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
@@ -135,11 +135,11 @@
                 {
                     "name": "",
                     "id": "14316ad3-3d4c-4284-8af0-29472e528f98",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "Kick",
+                    "action": "Grab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -150,14 +150,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Kick",
+                    "action": "Grab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "2a206e78-ab86-45c6-9ca2-3a54b70cab77",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
@@ -168,7 +168,7 @@
                 {
                     "name": "",
                     "id": "6379f5aa-f95e-4fc0-affb-d11d7b72a756",
-                    "path": "<Keyboard>/l",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
@@ -179,7 +179,7 @@
                 {
                     "name": "",
                     "id": "0d928dc1-20f9-4cc9-a624-83add704c264",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
@@ -201,7 +201,7 @@
                 {
                     "name": "",
                     "id": "f6dc7217-c550-46a7-9bca-8728b949748e",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
@@ -212,7 +212,7 @@
                 {
                     "name": "",
                     "id": "773145ab-b431-4d3f-adac-12084dfb7af9",
-                    "path": "<Keyboard>/u",
+                    "path": "<Keyboard>/l",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
@@ -223,11 +223,11 @@
                 {
                     "name": "",
                     "id": "5b30fd4c-d53a-4afb-894a-1d494e015d09",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
-                    "action": "Right Shoulder",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -238,14 +238,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Right Shoulder",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "4d61b49b-e5a9-4214-b6b6-b9c72d341ef4",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "GamePad",
@@ -256,7 +256,7 @@
                 {
                     "name": "",
                     "id": "a52e61a4-2ee8-41b9-867d-0153f64c402f",
-                    "path": "<Keyboard>/o",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",

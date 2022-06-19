@@ -17,8 +17,9 @@ public class CharacterComponent : MonoBehaviour
     public Transform weaponPivot;
 
     protected bool cannotAttack;
-    protected bool use2ndHurtAnim;
+    protected bool use2HurtAnim;
 
+    #region animatorHashes
     protected readonly int moveHash = Animator.StringToHash("Moving");
     protected readonly int jumpTriggerName = Animator.StringToHash("Jump");
     protected readonly int hurtTriggerName = Animator.StringToHash("Hurt");
@@ -27,6 +28,7 @@ public class CharacterComponent : MonoBehaviour
     protected readonly int guardingBoolName = Animator.StringToHash("Guarding");
     protected readonly int pickUpWeaponTriggerName = Animator.StringToHash("PickUp");
     protected readonly int throwTriggerName = Animator.StringToHash("Throw");
+    #endregion
 
     public virtual void Hurt()
     {

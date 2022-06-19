@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 200
   damage: 40
   attackCooldown: 3
-  attackRange: 20
+  attackRange: 10
   closeDistance: 40
   farDistance: 60
   dieAnimationDuration: 3
@@ -29,4 +29,4 @@ MonoBehaviour:
   animationBlendDamp: 0.2
   randomNoise: 10
   slowStateUpdateInterval: 1
-  fastStateUpdateInterval: 0.2
+  fastStateUpdateInterval: 0.1

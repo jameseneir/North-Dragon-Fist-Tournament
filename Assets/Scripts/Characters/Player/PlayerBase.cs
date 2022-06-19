@@ -7,6 +7,7 @@ using Cinemachine;
 public class PlayerBase : CharacterComponent
 {
     #region Input
+    [Header("Input")]
     [SerializeField]
     InputActionReference moveAction;
 
@@ -35,10 +36,8 @@ public class PlayerBase : CharacterComponent
     InputActionReference rightShoulderInput;
     #endregion
 
-    [SerializeField]
-    AudioSource audioSource;
-
     #region Movement
+    [Header("Movement")]
     protected Vector2 direction;
     protected Vector3 velocity;
 
@@ -46,15 +45,29 @@ public class PlayerBase : CharacterComponent
     protected CharacterController controller;
     float stepOffset;
 
+    protected bool isJumping;
+    protected bool falling;
+    bool StartGroundCheck
+    {
+        get { return elapsedTimeSinceJumpButtonPress <= 0; }
+    }
+    protected float elapsedTimeSinceJumpButtonPress = 0.3f;
     protected float jumpVelocity;
     [SerializeField]
     protected float gravity = -9.81f * 5;
-    protected float yVel;
+    protected float yVelocity;
     [SerializeField]
     protected float midAirMoveSpeed;
 
     protected bool cannotMove;
     protected bool move;
+
+    bool isDashing;
+    [SerializeField]
+    float dashSpeed;
+    [SerializeField]
+    float dashDuration;
+    float dashTimer;
 
     protected readonly int dashHash = Animator.StringToHash("Dash");
     protected readonly int jumpingBoolHash = Animator.StringToHash("IsJumping");
@@ -65,13 +78,8 @@ public class PlayerBase : CharacterComponent
     protected float animationBlendDamp = 0.3f;
     #endregion
 
-    [SerializeField]
-    Health health;
-
-    [SerializeField]
-    protected Animator anim;
-
     #region Attack
+    [Header("Attack")]
     public List<AttackData> data;
 
     [SerializeField]
@@ -80,17 +88,27 @@ public class PlayerBase : CharacterComponent
     bool isAttacking;
     bool isGuarding;
 
-    int currentAttack;
+    bool CanUseSpecialAttack
+    {
+        get { return isAttacking && confidence < data[attackCount + 1].confidenceCost && attackCount != 0; }
+    }
+
+    int currentAttackIndex;
+    int attackCount;
+
+    bool isMovingForward;
+    float forwardSpeed;
 
     [SerializeField]
     GameObject[] attackVFX;
 
     [SerializeField]
     HitBox[] hitBoxes;
+    bool hitboxEnabled, vfxEnabled;
 
     [SerializeField]
-    protected Collider[] buffer;
-    protected Collider target;
+    protected Collider[] enemiesInRangeColliders;
+    protected Collider closestEnemy;
 
     [SerializeField]
     protected LayerMask enemyLayer;
@@ -99,7 +117,7 @@ public class PlayerBase : CharacterComponent
     protected Vector3 offset;
 
     [SerializeField]
-    protected Vector3 proximityBox;
+    protected Vector3 proximityCheckBox;
 
     int confidence;
     readonly int maxConfidence = 30;
@@ -107,6 +125,17 @@ public class PlayerBase : CharacterComponent
     [SerializeField]
     UnityEngine.UI.Slider confidenceMeter;
     #endregion
+
+
+    [Header("Others")]
+    [SerializeField]
+    AudioSource audioSource;
+
+    [SerializeField]
+    Health health;
+
+    [SerializeField]
+    protected Animator anim;
 
     [SerializeField]
     GameObject gameOverPanel;
@@ -127,7 +156,7 @@ public class PlayerBase : CharacterComponent
     float timeStopDuration;
     WaitForSecondsRealtime pauseTime;
 
-    protected virtual void SetUp()
+    protected virtual void SetUpForChildClasses()
     {
 
     }
@@ -233,12 +262,13 @@ public class PlayerBase : CharacterComponent
             
         };
         #endregion
-        SetUp();
+        SetUpForChildClasses();
 
+        #region SetUpScreenShake
         multi = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         screenShakeTime = new WaitForSecondsRealtime(screenShakeDuration);
-
         pauseTime = new WaitForSecondsRealtime(timeStopDuration);
+        #endregion
 
         if (confidenceMeter == null) return;
         confidenceMeter.value = confidence;
@@ -284,64 +314,69 @@ public class PlayerBase : CharacterComponent
         {
             //index = currentWeapon.attackIndex;
         }
-        currentAttack = index;
+        currentAttackIndex = index;
         anim.SetTrigger(data[index].animatorHashesIndex);
-        int inRange = Physics.OverlapBoxNonAlloc(transform.position + offset, proximityBox, buffer, Quaternion.identity, enemyLayer, QueryTriggerInteraction.Ignore);
-        if (inRange == 0)
+        GetClosestEnemy();
+        if(closestEnemy != null)
+            transform.LookAt(closestEnemy.transform, transform.up);
+    }
+
+    void GetClosestEnemy()
+    {
+        int enemiesInRange = Physics.OverlapBoxNonAlloc(transform.position + offset, proximityCheckBox, enemiesInRangeColliders, Quaternion.identity, enemyLayer, QueryTriggerInteraction.Ignore);
+        if (enemiesInRange == 0)
             return;
-        switch(inRange)
+        switch (enemiesInRange)
         {
             case 1:
-                target = buffer[1];
+                closestEnemy = enemiesInRangeColliders[1];
                 break;
             case 2:
-                if(target == null || (target != buffer[0] && target != buffer[1]))
+                if (closestEnemy == null || (closestEnemy != enemiesInRangeColliders[0] && closestEnemy != enemiesInRangeColliders[1]))
                 {
-                    if(transform.position.SqurDistance(buffer[0].transform.position) < transform.position.SqurDistance(buffer[1].transform.position))
+                    if (transform.position.SqurDistance(enemiesInRangeColliders[0].transform.position) < transform.position.SqurDistance(enemiesInRangeColliders[1].transform.position))
                     {
-                        target = buffer[0];
+                        closestEnemy = enemiesInRangeColliders[0];
                     }
                     else
                     {
-                        target = buffer[1];
+                        closestEnemy = enemiesInRangeColliders[1];
                     }
                 }
                 break;
             case 3:
-                if (target == null || (target != buffer[0] && target != buffer[1] && target != buffer[2]))
+                if (closestEnemy == null || (closestEnemy != enemiesInRangeColliders[0] && closestEnemy != enemiesInRangeColliders[1] && closestEnemy != enemiesInRangeColliders[2]))
                 {
-                    if (transform.position.SqurDistance(buffer[0].transform.position) < transform.position.SqurDistance(buffer[1].transform.position))
+                    if (transform.position.SqurDistance(enemiesInRangeColliders[0].transform.position) < transform.position.SqurDistance(enemiesInRangeColliders[1].transform.position))
                     {
-                        if (transform.position.SqurDistance(buffer[0].transform.position) < transform.position.SqurDistance(buffer[2].transform.position))
+                        if (transform.position.SqurDistance(enemiesInRangeColliders[0].transform.position) < transform.position.SqurDistance(enemiesInRangeColliders[2].transform.position))
                         {
-                            target = buffer[0];
+                            closestEnemy = enemiesInRangeColliders[0];
                         }
                         else
                         {
-                            target = buffer[2];
+                            closestEnemy = enemiesInRangeColliders[2];
                         }
                     }
                     else
                     {
-                        if (transform.position.SqurDistance(buffer[1].transform.position) < transform.position.SqurDistance(buffer[2].transform.position))
+                        if (transform.position.SqurDistance(enemiesInRangeColliders[1].transform.position) < transform.position.SqurDistance(enemiesInRangeColliders[2].transform.position))
                         {
-                            target = buffer[1];
+                            closestEnemy = enemiesInRangeColliders[1];
                         }
                         else
                         {
-                            target = buffer[2];
+                            closestEnemy = enemiesInRangeColliders[2];
                         }
                     }
                 }
                 break;
         }
-        transform.LookAt(target.transform, transform.up);
     }
 
-    int attackCount;
     protected virtual void SpecialAttack()
     {
-        if(isAttacking && confidence < data[attackCount + 1].confidenceCost && attackCount != 0)
+        if(CanUseSpecialAttack)
         {
             Attack(attackCount + 1);
             confidence -= data[attackCount + 1].confidenceCost;
@@ -349,7 +384,6 @@ public class PlayerBase : CharacterComponent
         }
     }
 
-    bool hitboxEnabled, vfxEnabled;
     public override void EnableHitbox(int index)
     {
         hitboxEnabled = true;
@@ -378,12 +412,10 @@ public class PlayerBase : CharacterComponent
     {
         cannotMove = true;
         isAttacking = true;
-        audioSource.PlayOneShot(stats.attackSFX[currentAttack], Random.Range(0.8f, 1));
+        audioSource.PlayOneShot(stats.attackSFX[currentAttackIndex], Random.Range(0.8f, 1));
         attackCount = index;
     }
 
-    bool isMovingForward;
-    float forwardSpeed;
     public void StartMovingForward(float speed)
     {
         forwardSpeed = speed;
@@ -405,6 +437,7 @@ public class PlayerBase : CharacterComponent
 
     void MovingForward()
     {
+
         controller.Move(forwardSpeed * Time.deltaTime * transform.forward);
     }
 
@@ -424,11 +457,11 @@ public class PlayerBase : CharacterComponent
         }
         if(vfxEnabled)
         {
-            DisableAttackVFX(currentAttack);
+            DisableAttackVFX(currentAttackIndex);
         }
         if(hitboxEnabled)
         {
-            DisableHitbox(currentAttack);
+            DisableHitbox(currentAttackIndex);
         }
         if (!isHurt && !isDead)
             cannotMove = false;
@@ -463,21 +496,38 @@ public class PlayerBase : CharacterComponent
     {
         isHurt = true;
         audioSource.PlayOneShot(stats.hurtSFX);
-        if (!use2ndHurtAnim)
+        if (!use2HurtAnim)
             anim.SetTrigger(hurtTriggerName);
         else
             anim.SetTrigger(hurt2TriggerName);
-        use2ndHurtAnim = !use2ndHurtAnim;
+        use2HurtAnim = !use2HurtAnim;
         cannotMove = true;
         cannotAttack = true;
         if (move)
             StopMoving();
-        //screen shake
+        ScreenShake();
+        PauseTime();
+    }
+
+    public override void ExitHurtState()
+    {
+        cannotAttack = false;
+        cannotMove = false;
+        isHurt = false;
+    }
+    #endregion
+
+    #region ScreenShake & Time-pause
+    void ScreenShake()
+    {
         multi.m_AmplitudeGain = screenShakeIntensity;
         StartCoroutine(ResetScreenShake());
-        //time stop
-        StartCoroutine(ResumeTime());
+    }
+
+    void PauseTime()
+    {
         Time.timeScale = 0;
+        StartCoroutine(ResumeTime());
     }
 
     IEnumerator ResetScreenShake()
@@ -490,13 +540,6 @@ public class PlayerBase : CharacterComponent
     {
         yield return pauseTime;
         Time.timeScale = 1;
-    }
-
-    public override void ExitHurtState()
-    {
-        cannotAttack = false;
-        cannotMove = false;
-        isHurt = false;
     }
     #endregion
 
@@ -537,33 +580,22 @@ public class PlayerBase : CharacterComponent
             StopMoving();
         if(isUsingWeapon)
         {
-            //switch weapon
             //drop current weapon
-            weaponPivot.DetachChildren();
-            currentWeapon.transform.SetPositionAndRotation(weaponPivot.position, weaponPivot.rotation);
+            DetachWeaponTransform();
             currentWeapon.Unequip();
-            
-            //equip new weapon
-            anim.SetTrigger(pickUpWeaponTriggerName);
-            detectedWeapon.Equip(this);
-            detectedWeapon.transform.SetParent(weaponPivot);
-            detectedWeapon.transform.localPosition = Vector3.zero;
-            detectedWeapon.transform.localRotation = Quaternion.identity;
-            currentWeapon = detectedWeapon;
-            detectedWeapon = null;
         }
         else
         {
-            //pick up
-            anim.SetTrigger(pickUpWeaponTriggerName);
-            detectedWeapon.Equip(this);
-            detectedWeapon.transform.SetParent(weaponPivot);
-            detectedWeapon.transform.localPosition = Vector3.zero;
-            detectedWeapon.transform.localRotation = Quaternion.identity;
-            currentWeapon = detectedWeapon;
-            detectedWeapon = null;
             isUsingWeapon = true;
         }
+        anim.SetTrigger(pickUpWeaponTriggerName);
+        detectedWeapon.Equip(this);
+        //attach weapon transform to the weapon pivot
+        detectedWeapon.transform.SetParent(weaponPivot);
+        detectedWeapon.transform.localPosition = Vector3.zero;
+        detectedWeapon.transform.localRotation = Quaternion.identity;
+        currentWeapon = detectedWeapon;
+        detectedWeapon = null;
     }
 
     protected override void ThrowWeapon()
@@ -571,8 +603,7 @@ public class PlayerBase : CharacterComponent
         if (move)
             StopMoving();
         anim.SetTrigger(throwTriggerName);
-        weaponPivot.DetachChildren();
-        currentWeapon.transform.SetPositionAndRotation(weaponPivot.position, weaponPivot.rotation);
+        DetachWeaponTransform();
         currentWeapon.Unequip();
         currentWeapon.Throw(weaponThrowForce * transform.forward);
         currentWeapon = null;
@@ -581,8 +612,7 @@ public class PlayerBase : CharacterComponent
 
     protected override void DropWeapon()
     {
-        weaponPivot.DetachChildren();
-        currentWeapon.transform.SetPositionAndRotation(weaponPivot.position, weaponPivot.rotation);
+        DetachWeaponTransform();
         currentWeapon.Unequip();
         currentWeapon = null;
         isUsingWeapon = false;
@@ -593,69 +623,74 @@ public class PlayerBase : CharacterComponent
         isUsingWeapon = false;
         currentWeapon = null;
     }
+
+    void DetachWeaponTransform()
+    {
+        weaponPivot.DetachChildren();
+        currentWeapon.transform.SetPositionAndRotation(weaponPivot.position, weaponPivot.rotation);
+    }
     #endregion
 
     #region Jump
-    protected bool isJumping;
-    protected bool falling;
     protected virtual void Jump()
     {
         audioSource.PlayOneShot(stats.jumpSFX);
         anim.SetBool(jumpingBoolHash, true);
         isJumping = true;
-        yVel = jumpVelocity;
+        yVelocity = jumpVelocity;
         controller.stepOffset = 0;
         StartCoroutine(Jumping());
     }
 
-    protected float timer = 0.3f;
     IEnumerator Jumping()
     {
         while(isJumping)
         {
-            if(timer > 0)
+            //If we start ground-checking right after the player presses the jump jump button
+            //controller.isGrounded will return true since
+            //the player collider hasn't move up high enough so it is still touching the ground
+            if(!StartGroundCheck)
             {
-                timer -= Time.deltaTime;
-                yVel += gravity * Time.deltaTime;
+                elapsedTimeSinceJumpButtonPress -= Time.deltaTime;
+                yVelocity += gravity * Time.deltaTime;
             }
+            //start ground-checking
             else
             {
                 if (controller.isGrounded)
                 {
-                    falling = false;
-                    isJumping = false;
-                    anim.SetBool(groundedBoolHash, true);
-                    anim.SetBool(jumpingBoolHash, false);
-                    anim.SetBool(fallingBoolHash, false);
-                    yVel = -0.5f;
-                    timer = 0.3f;
-                    controller.stepOffset = stepOffset;
+                    Landing();
+                    elapsedTimeSinceJumpButtonPress = 0.3f;
                     yield break;
                 }
                 else
                 {
-                    
-                    anim.SetBool(groundedBoolHash, false);
-                    if (yVel < 0)
-                    {
-                        yVel += 2 * gravity * Time.deltaTime;
-                        if (!falling)
-                        {
-                            anim.SetBool(fallingBoolHash, true);
-                            falling = true;
-                        }
-                    }
-                    else
-                    {
-                        yVel += gravity * Time.deltaTime;
-                    }
+                    InMidAir();
                 }
             }
             if (!move)
             {
-                controller.Move(yVel * Time.deltaTime * Vector3.up);
+                controller.Move(yVelocity * Time.deltaTime * Vector3.up);
             }
             yield return null;
+        }
+    }
+
+    void InMidAir()
+    {
+        anim.SetBool(groundedBoolHash, false);
+        if (yVelocity < 0)
+        {
+            yVelocity += 2 * gravity * Time.deltaTime;
+            if (!falling)
+            {
+                anim.SetBool(fallingBoolHash, true);
+                falling = true;
+            }
+        }
+        else
+        {
+            yVelocity += gravity * Time.deltaTime;
         }
     }
 
@@ -665,35 +700,34 @@ public class PlayerBase : CharacterComponent
         {
             if(!controller.isGrounded)
             {
-                yVel += gravity * Time.deltaTime;
+                yVelocity += gravity * Time.deltaTime;
                 if (!move)
                 {
-                    controller.Move(yVel * Time.deltaTime * Vector3.up);
+                    controller.Move(yVelocity * Time.deltaTime * Vector3.up);
                 }
             }
             else
             {
-                falling = false;
-                isJumping = false;
-                anim.SetBool(groundedBoolHash, true);
-                anim.SetBool(jumpingBoolHash, false);
-                anim.SetBool(fallingBoolHash, false);
-                controller.stepOffset = stepOffset;
-                yVel = -0.5f;
+                Landing();
                 yield break;
             }
             yield return null;
         }
     }
+
+    private void Landing()
+    {
+        falling = false;
+        isJumping = false;
+        anim.SetBool(groundedBoolHash, true);
+        anim.SetBool(jumpingBoolHash, false);
+        anim.SetBool(fallingBoolHash, false);
+        controller.stepOffset = stepOffset;
+        yVelocity = -0.5f;
+    }
     #endregion
 
     #region Dash
-    bool isDashing;
-    [SerializeField]
-    float dashSpeed;
-    [SerializeField]
-    float dashDuration;
-    float dashTimer;
     void Dash()
     {
         if(!isDashing)

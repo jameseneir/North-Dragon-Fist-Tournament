@@ -49,15 +49,15 @@ public class UnlockedList : MonoBehaviour
         selected = new List<AttackData>();
 
         int i = 0;
-        foreach(GameObject obj in buttonsRow)
+        foreach(GameObject button in buttonsRow)
         {
             if(unlockedSkills.Contains(i))
             {
-                obj.SetActive(true);
+                button.SetActive(true);
             }
             else
             {
-                obj.SetActive(false);
+                button.SetActive(false);
             }
             i++;
         }

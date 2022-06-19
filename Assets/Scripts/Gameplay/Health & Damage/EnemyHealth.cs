@@ -6,7 +6,7 @@ public class EnemyHealth : Health
 
     protected override void SetUp()
     {
-        stats = GetComponent<EnemyBase>().enemy;
+        stats = GetComponent<EnemyBase>().enemyStats;
         MaxHP = stats.health;
         HP = MaxHP;
         if(HPSlider != null && HPSlider.maxValue != MaxHP)
