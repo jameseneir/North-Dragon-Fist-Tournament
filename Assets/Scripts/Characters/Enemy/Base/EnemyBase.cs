@@ -56,8 +56,8 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     WaitForSeconds slowStateUpdate;
     WaitForSeconds fastStateUpdate;
 
-    float closeDistance;
-    float farDistance;
+    float stopChasingDistance;
+    float startChasingDistance;
     float atkRange;
     #endregion
 
@@ -79,8 +79,8 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         float randomRange = enemyStats.randomNoise;
         float initial = randomRange;
         randomRange = UnityEngine.Random.Range(-initial, initial);
-        closeDistance = enemyStats.closeDistance * enemyStats.closeDistance + randomRange;
-        farDistance = enemyStats.farDistance * enemyStats.farDistance + randomRange;
+        stopChasingDistance = enemyStats.stopChasingDistance * enemyStats.stopChasingDistance + randomRange;
+        startChasingDistance = enemyStats.startChasingDistance * enemyStats.startChasingDistance + randomRange;
         atkRange = enemyStats.attackRange * enemyStats.attackRange;
         #endregion
 
@@ -174,7 +174,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
 
     void Engage()
     {
-        if (Distance > closeDistance)
+        if (Distance > stopChasingDistance)
         {
             currentSubState = SubState.MOVE_CLOSER;
         }
@@ -216,7 +216,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
 
     void KeepCloseDistance()
     {
-        if (Distance > closeDistance)
+        if (Distance > stopChasingDistance)
         {
             currentSubState = SubState.MOVE_CLOSER;
             if (close)
@@ -254,7 +254,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
 
     void KeepFarDistance()
     {
-        if (Distance > farDistance)
+        if (Distance > startChasingDistance)
         {
             currentSubState = SubState.MOVE_CLOSER;
             if (close)
@@ -263,7 +263,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
                 stateUpdate = slowStateUpdate;
             }
         }
-        else if (Distance > closeDistance)
+        else if (Distance > stopChasingDistance)
         {
             currentSubState = SubState.IDLE;
             if (close)

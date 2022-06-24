@@ -6,8 +6,8 @@ public class EnemyStats : ScriptableObject
     public int damage;
     public float attackCooldown;
     public float attackRange;
-    public float closeDistance;
-    public float farDistance;
+    public float stopChasingDistance;
+    public float startChasingDistance;
     public float dieAnimationDuration;
     public bool canUseWeapon;
     public GameObject enemyPrefab;
