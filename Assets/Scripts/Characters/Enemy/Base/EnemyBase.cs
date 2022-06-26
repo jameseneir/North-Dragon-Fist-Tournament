@@ -38,7 +38,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     #region StateMachine
     public int State { get { return state; } }
     int state = -1;
-    // 0: engage, 1: keep close distance, 2: keep far distance, 3: attacking, 4: hurt
+    // 0: engage, 1: keep close distance, 2: keep far distance, 3: attacking, 4: hurt, 5: grabbed
     int previousState;
 
     Enum currentSubState;
@@ -466,6 +466,11 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         wave.EnemyDie(this);
         PoolingManager.Instance.SpawnObj(PoolObjectType.GEM, transform.position + new Vector3(0f, 2.5f, 0f), null);
         Destroy(gameObject, enemyStats.dieAnimationDuration);
+    }
+
+    public void IsGrabbed(Transform grabPoint)
+    {
+
     }
 
     public int CompareTo (EnemyBase other)
