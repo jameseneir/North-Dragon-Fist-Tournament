@@ -17,7 +17,7 @@ public class CharacterComponent : MonoBehaviour
     public Transform weaponPivot;
 
     protected bool cannotAttack;
-    protected bool use2HurtAnim;
+    protected bool switchHurtAnimation;
 
     #region animatorHashes
     protected readonly int moveHash = Animator.StringToHash("Moving");

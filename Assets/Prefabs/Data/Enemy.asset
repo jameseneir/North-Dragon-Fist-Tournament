@@ -16,8 +16,8 @@ MonoBehaviour:
   damage: 40
   attackCooldown: 3
   attackRange: 10
-  closeDistance: 40
-  farDistance: 60
+  stopChasingDistance: 20
+  startChasingDistance: 50
   dieAnimationDuration: 3
   canUseWeapon: 0
   enemyPrefab: {fileID: 1044468907826179784, guid: 6ea03db1fff074e62930e302bfc32274, type: 3}

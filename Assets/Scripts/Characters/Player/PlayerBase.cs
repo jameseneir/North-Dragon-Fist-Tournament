@@ -496,11 +496,11 @@ public class PlayerBase : CharacterComponent
     {
         isHurt = true;
         audioSource.PlayOneShot(stats.hurtSFX);
-        if (!use2HurtAnim)
+        if (!switchHurtAnimation)
             anim.SetTrigger(hurtTriggerName);
         else
             anim.SetTrigger(hurt2TriggerName);
-        use2HurtAnim = !use2HurtAnim;
+        switchHurtAnimation = !switchHurtAnimation;
         cannotMove = true;
         cannotAttack = true;
         if (move)

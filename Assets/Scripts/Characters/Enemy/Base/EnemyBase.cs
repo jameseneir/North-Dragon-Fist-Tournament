@@ -17,6 +17,8 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     public float Distance { get; private set; }
 
     Vector3 velocity;
+    [SerializeField]
+    LayerMask groundLayer;
     #endregion
 
     #region Attack
@@ -61,10 +63,20 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     float atkRange;
     #endregion
 
+    #region Grabbed
+    [SerializeField] string grabbedTriggerName = "IsGrabbed";
+    int grabbedHash;
+
+    bool isThrown;
+    #endregion
+
     protected float animationBlendDamp;
 
     [SerializeField]
     float randomAwakeDelay = 3f;
+
+    [SerializeField]
+    EnemyHealth health;
 
     [SerializeField]
     AudioSource audioSource;
@@ -75,6 +87,7 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
     void Start()
     {
         animationBlendDamp = enemyStats.animationBlendDamp;
+        //grabbedHash = Animator.StringToHash(grabbedTriggerName);
         #region Set up ranges
         float randomRange = enemyStats.randomNoise;
         float initial = randomRange;
@@ -84,9 +97,11 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         atkRange = enemyStats.attackRange * enemyStats.attackRange;
         #endregion
 
+        #region Set up update intervals
         atkCoolDown = new WaitForSeconds(enemyStats.attackCooldown);
         slowStateUpdate = new WaitForSeconds(enemyStats.slowStateUpdateInterval);
         fastStateUpdate = new WaitForSeconds(enemyStats.fastStateUpdateInterval);
+        #endregion
         stateUpdate = slowStateUpdate;
 
         //parse animator string values to hashes to improve performance
@@ -438,6 +453,20 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
 
     public override void Hurt()
     {
+        StopMoving();
+        audioSource.PlayOneShot(enemyStats.hurtSFX);
+        isHurt = true;
+        state = 4;
+        if (!switchHurtAnimation)
+            anim.SetTrigger(hurtTriggerName);
+        else
+            anim.SetTrigger(hurt2TriggerName);
+        switchHurtAnimation = !switchHurtAnimation;
+    }
+    #endregion
+
+    void StopMoving()
+    {
         if (state < 3)
         {
             if (move)
@@ -446,20 +475,11 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
             previousState = state;
             StopCoroutine(ChangeStateIfNeeded());
         }
-        audioSource.PlayOneShot(enemyStats.hurtSFX);
-        isHurt = true;
-        state = 4;
-        if (!use2HurtAnim)
-            anim.SetTrigger(hurtTriggerName);
-        else
-            anim.SetTrigger(hurt2TriggerName);
-        use2HurtAnim = !use2HurtAnim;
     }
-    #endregion
 
     public override void Die()
     {
-        state = 5;
+        state = 6;
         isDead = true;
         audioSource.PlayOneShot(enemyStats.dieSFX);
         anim.SetTrigger(dieTriggerName);
@@ -468,11 +488,37 @@ public class EnemyBase : CharacterComponent, IComparable<EnemyBase>
         Destroy(gameObject, enemyStats.dieAnimationDuration);
     }
 
+    #region Grab
     public void IsGrabbed(Transform grabPoint)
     {
-
+        StopMoving();
+        state = 5;
+        transform.SetParent(grabPoint);
+        transform.localPosition = Vector3.zero;
+        anim.SetTrigger(grabbedHash);
     }
 
+    public void IsThrown(int collideDamage)
+    {
+        collisionDamage = collideDamage;
+        isThrown = true;
+    }
+
+    int collisionDamage;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(isThrown)
+        {
+            gameObject.GetComponent<EnemyHealth>().TakeDamage(collisionDamage);
+            if(collision.gameObject.layer == gameObject.layer)
+            {
+                collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(collisionDamage);
+            }
+            isThrown = false;
+        }
+    }
+    #endregion
     public int CompareTo (EnemyBase other)
     {
         return Mathf.RoundToInt(Distance - other.Distance);

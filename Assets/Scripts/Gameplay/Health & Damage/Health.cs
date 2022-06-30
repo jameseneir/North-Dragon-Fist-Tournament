@@ -73,4 +73,23 @@ public class Health : MonoBehaviour
             }
         }
     }
+
+    public void TakeDamageNoHurtAnimation(int amount)
+    {
+        if (character.isDead)
+            return;
+        HP -= amount;
+        if (HP <= 0)
+        {
+            character.Die();
+            HP = 0;
+            if (HPSlider != null)
+                HPSlider.value = 0;
+        }
+        else
+        {
+            if (HPSlider != null)
+                HPSlider.value = HP;
+        }
+    }
 }

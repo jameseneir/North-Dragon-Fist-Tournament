@@ -11,6 +11,9 @@ public class GrabAttack : MonoBehaviour
     [SerializeField]
     LayerMask enemyLayer;
 
+    [SerializeField]
+    int damage;
+
     public void Grab()
     {
         if(Physics.BoxCast(grabPoint.position, grabBoxHalfExtents, -grabPoint.forward,
